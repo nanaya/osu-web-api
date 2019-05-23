@@ -1,0 +1,2529 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>API Reference</title>
+
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="js/all.js"></script>
+
+
+          <script>
+        $(function() {
+            setupLanguages(["bash","javascript"]);
+        });
+      </script>
+      </head>
+
+  <body class="">
+    <a href="#" id="nav-button">
+      <span>
+        NAV
+        <img src="images/navbar.png" />
+      </span>
+    </a>
+    <div class="tocify-wrapper">
+        <img src="images/logo.png" />
+                    <div class="lang-selector">
+                                  <a href="#" data-language-name="bash">bash</a>
+                                  <a href="#" data-language-name="javascript">javascript</a>
+                            </div>
+                            <div class="search">
+              <input type="text" class="search" id="input-search" placeholder="Search">
+            </div>
+            <ul class="search-results"></ul>
+              <div id="toc">
+      </div>
+                    <ul class="toc-footer">
+                                  <li><a href="https://github.com/ppy/osu-web">osu-web</a></li>
+                                  <li><a href="https://osu.ppy.sh">osu!</a></li>
+                            </ul>
+            </div>
+    <div class="page-wrapper">
+      <div class="dark-box"></div>
+      <div class="content">
+          <!-- START_INFO -->
+<h1>Info</h1>
+<p>Welcome to the osu!api. You can use this API to get information on various circles and those who click them.</p>
+<p>You can view code examples in the dark area to the right.</p>
+<p>The API and this documentation are a work-in-progress and likely contains errors.</p>
+<p><a href="http://127.0.0.1:8000/docs/collection.json">Get Postman Collection</a></p>
+<!-- END_INFO -->
+<h1>Chat</h1>
+<!-- START_959a851f02384dc7cbff5b508f31e142 -->
+<h2>Create New PM</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X POST "http://127.0.0.1:8000/api/v2/chat/new" \
+    -H "Authorization: Bearer {{token}}" \
+    -H "Content-Type: application/json" \
+    -d '{"target_id":1,"message":"et","is_action":true}'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/chat/new");
+
+let headers = {
+    "Authorization": "Bearer {{token}}"
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+}
+
+let body = {
+    "target_id": 1,
+    "message": "et",
+    "is_action": true
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+.then(response =&gt; response.json())
+.then(json =&gt; console.log(json));</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "new_channel_id": 1234,
+    "presence": [
+        {
+            "channel_id": 5,
+            "name": "#osu",
+            "description": "The official osu! channel (english only).",
+            "type": "public",
+            "last_read_id": 9150005005,
+            "last_message_id": 9150005005
+        },
+        {
+            "channel_id": 1234,
+            "type": "PM",
+            "name": "peppy",
+            "icon": "https:\/\/a.ppy.sh\/2?1519081077.png",
+            "users": [
+                2,
+                102
+            ],
+            "last_read_id": 9150001235,
+            "last_message_id": 9150001234
+        }
+    ],
+    "message": {
+        "message_id": 9150005005,
+        "sender_id": 102,
+        "channel_id": 1234,
+        "timestamp": "2018-07-06T06:33:42+00:00",
+        "content": "i can haz featured artist plz?",
+        "is_action": 0,
+        "sender": {
+            "id": 102,
+            "username": "nekodex",
+            "profile_colour": "#333333",
+            "avatar_url": "https:\/\/a.ppy.sh\/102?1500537068",
+            "country_code": "AU",
+            "is_active": true,
+            "is_bot": false,
+            "is_online": true,
+            "is_supporter": true
+        }
+    }
+}</code></pre>
+<p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+This endpoint allows you to create a new PM channel.</p>
+<h3>HTTP Request</h3>
+<p><code>POST chat/new</code></p>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>target_id</td>
+<td>integer</td>
+<td>required</td>
+<td><code>user_id</code> of user to start PM with</td>
+</tr>
+<tr>
+<td>message</td>
+<td>string</td>
+<td>required</td>
+<td>message to send</td>
+</tr>
+<tr>
+<td>is_action</td>
+<td>boolean</td>
+<td>required</td>
+<td>whether the message is an action</td>
+</tr>
+</tbody>
+</table>
+<h3>Response Format</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>new_channel_id</td>
+<td><code>channel_id</code> of newly created <a href="#chatchannel">ChatChannel</a></td>
+</tr>
+<tr>
+<td>presence</td>
+<td>array of <a href="#chatchannel">ChatChannel</a></td>
+</tr>
+<tr>
+<td>message</td>
+<td>the sent <a href="#chatmessage">ChatMessage</a></td>
+</tr>
+</tbody>
+</table>
+<aside class="notice">
+  This endpoint will only allow the creation of PMs initially, group chat support will come later.
+</aside>
+<!-- END_959a851f02384dc7cbff5b508f31e142 -->
+<!-- START_e591fd891352dc3c9001dda569df00b6 -->
+<h2>Get Updates</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET -G "http://127.0.0.1:8000/api/v2/chat/updates" </code></pre>
+<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/chat/updates");
+
+    let params = {
+            "since": "provident",
+            "channel_id": "voluptas",
+            "limit": "16",
+        };
+    Object.keys(params).forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+let headers = {
+    "Authorization": "Bearer {{token}}"
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+}
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+.then(response =&gt; response.json())
+.then(json =&gt; console.log(json));</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "presence": [
+        {
+            "channel_id": 5,
+            "name": "#osu",
+            "description": "The official osu! channel (english only).",
+            "type": "public",
+            "last_read_id": 9150005005,
+            "last_message_id": 9150005005
+        },
+        {
+            "channel_id": 12345,
+            "type": "PM",
+            "name": "peppy",
+            "icon": "https:\/\/a.ppy.sh\/2?1519081077.png",
+            "users": [
+                2,
+                102
+            ],
+            "last_read_id": 9150001235,
+            "last_message_id": 9150001234
+        }
+    ],
+    "messages": [
+        {
+            "message_id": 9150005004,
+            "sender_id": 2,
+            "channel_id": 5,
+            "timestamp": "2018-07-06T06:33:34+00:00",
+            "content": "i am a lazerface",
+            "is_action": 0,
+            "sender": {
+                "id": 2,
+                "username": "peppy",
+                "profile_colour": "#3366FF",
+                "avatar_url": "https:\/\/a.ppy.sh\/2?1519081077.png",
+                "country_code": "AU",
+                "is_active": true,
+                "is_bot": false,
+                "is_online": true,
+                "is_supporter": true
+            }
+        },
+        {
+            "message_id": 9150005005,
+            "sender_id": 102,
+            "channel_id": 5,
+            "timestamp": "2018-07-06T06:33:42+00:00",
+            "content": "uh ok then",
+            "is_action": 0,
+            "sender": {
+                "id": 102,
+                "username": "nekodex",
+                "profile_colour": "#333333",
+                "avatar_url": "https:\/\/a.ppy.sh\/102?1500537068",
+                "country_code": "AU",
+                "is_active": true,
+                "is_bot": false,
+                "is_online": true,
+                "is_supporter": true
+            }
+        }
+    ]
+}</code></pre>
+<p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+This endpoint returns new messages since the given <code>message_id</code> along with updated channel 'presence' data.</p>
+<h3>HTTP Request</h3>
+<p><code>GET chat/updates</code></p>
+<h4>Query Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>since</td>
+<td>required</td>
+<td>The <code>message_id</code> of the last message to retrieve messages since</td>
+</tr>
+<tr>
+<td>channel_id</td>
+<td>optional</td>
+<td>If provided, will only return messages for the given channel</td>
+</tr>
+<tr>
+<td>limit</td>
+<td>optional</td>
+<td>number of messages to return (max of 50)</td>
+</tr>
+</tbody>
+</table>
+<h3>Response Format</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>presence</td>
+<td>array of <a href="#chatchannel">ChatChannel</a></td>
+</tr>
+<tr>
+<td>messages</td>
+<td>array of <a href="#chatmessage">ChatMessage</a></td>
+</tr>
+</tbody>
+</table>
+<aside class="notice">
+  Note that this returns messages for all channels the user has joined.
+</aside>
+<!-- END_e591fd891352dc3c9001dda569df00b6 -->
+<!-- START_e71529c9b69443e29970ab881f7d3fbf -->
+<h2>api/v2/chat/presence</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET -G "http://127.0.0.1:8000/api/v2/chat/presence" </code></pre>
+<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/chat/presence");
+
+let headers = {
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+}
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+.then(response =&gt; response.json())
+.then(json =&gt; console.log(json));</code></pre>
+<blockquote>
+<p>Example response (401):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "authentication": "basic"
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET chat/presence</code></p>
+<!-- END_e71529c9b69443e29970ab881f7d3fbf -->
+<!-- START_b18ba41b1b4d8e4576aa768fa5c29946 -->
+<h2>Get Channel Messages</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET -G "http://127.0.0.1:8000/api/v2/chat/channels/1/messages" </code></pre>
+<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/chat/channels/1/messages");
+
+    let params = {
+            "channel_id": "repudiandae",
+            "limit": "13",
+        };
+    Object.keys(params).forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+let headers = {
+    "Authorization": "Bearer {{token}}"
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+}
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+.then(response =&gt; response.json())
+.then(json =&gt; console.log(json));</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">[
+    {
+        "message_id": 9150005004,
+        "sender_id": 2,
+        "channel_id": 5,
+        "timestamp": "2018-07-06T06:33:34+00:00",
+        "content": "i am a lazerface",
+        "is_action": 0,
+        "sender": {
+            "id": 2,
+            "username": "peppy",
+            "profile_colour": "#3366FF",
+            "avatar_url": "https:\/\/a.ppy.sh\/2?1519081077.png",
+            "country_code": "AU",
+            "is_active": true,
+            "is_bot": false,
+            "is_online": true,
+            "is_supporter": true
+        }
+    },
+    {
+        "message_id": 9150005005,
+        "sender_id": 102,
+        "channel_id": 5,
+        "timestamp": "2018-07-06T06:33:42+00:00",
+        "content": "uh ok then",
+        "is_action": 0,
+        "sender": {
+            "id": 102,
+            "username": "nekodex",
+            "profile_colour": "#333333",
+            "avatar_url": "https:\/\/a.ppy.sh\/102?1500537068",
+            "country_code": "AU",
+            "is_active": true,
+            "is_bot": false,
+            "is_online": true,
+            "is_supporter": true
+        }
+    }
+]</code></pre>
+<p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+This endpoint returns the chat messages for a specific channel.</p>
+<h3>HTTP Request</h3>
+<p><code>GET chat/channels/{channel}/messages</code></p>
+<h4>Query Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>channel_id</td>
+<td>required</td>
+<td>The ID of the channel to retrieve messages for</td>
+</tr>
+<tr>
+<td>limit</td>
+<td>optional</td>
+<td>number of messages to return (max of 50)</td>
+</tr>
+</tbody>
+</table>
+<h3>Response Format</h3>
+<p>Returns an array of <a href="#chatmessage">ChatMessage</a></p>
+<!-- END_b18ba41b1b4d8e4576aa768fa5c29946 -->
+<!-- START_1ab08871273163d95a7dd9e26cd30302 -->
+<h2>Send Message to Channel</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X POST "http://127.0.0.1:8000/api/v2/chat/channels/1/messages" </code></pre>
+<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/chat/channels/1/messages");
+
+    let params = {
+            "channel_id": "ea",
+        };
+    Object.keys(params).forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+let headers = {
+    "Authorization": "Bearer {{token}}"
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+})
+.then(response =&gt; response.json())
+.then(json =&gt; console.log(json));</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "message_id": 9150005004,
+    "sender_id": 2,
+    "channel_id": 5,
+    "timestamp": "2018-07-06T06:33:34+00:00",
+    "content": "i am a lazerface",
+    "is_action": 0,
+    "sender": {
+        "id": 2,
+        "username": "peppy",
+        "profile_colour": "#3366FF",
+        "avatar_url": "https:\/\/a.ppy.sh\/2?1519081077.png",
+        "country_code": "AU",
+        "is_active": true,
+        "is_bot": false,
+        "is_online": true,
+        "is_supporter": true
+    }
+}</code></pre>
+<p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+This endpoint returns the chat messages for a specific channel.</p>
+<h3>HTTP Request</h3>
+<p><code>POST chat/channels/{channel}/messages</code></p>
+<h4>Query Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>channel_id</td>
+<td>required</td>
+<td>The <code>channel_id</code> of the channel to send message to</td>
+</tr>
+</tbody>
+</table>
+<h3>Response Format</h3>
+<p>The sent <a href="#chatmessage">ChatMessage</a></p>
+<aside class="notice">
+  When sending a message, the <code>last_read_id</code> for the <a href='#chatchannel'>ChatChannel</a> is also updated to mark the new message as read.
+</aside>
+<!-- END_1ab08871273163d95a7dd9e26cd30302 -->
+<!-- START_51e2add0d6e60e1b9fab84abab86056c -->
+<h2>Join Channel</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X PUT "http://127.0.0.1:8000/api/v2/chat/channels/1/users/1" </code></pre>
+<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/chat/channels/1/users/1");
+
+let headers = {
+    "Authorization": "Bearer {{token}}"
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+}
+
+fetch(url, {
+    method: "PUT",
+    headers: headers,
+})
+.then(response =&gt; response.json())
+.then(json =&gt; console.log(json));</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "channel_id": 5,
+    "name": "#osu",
+    "description": "The official osu! channel (english only).",
+    "type": "public"
+}</code></pre>
+<p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+This endpoint allows you to join a public channel.</p>
+<h3>HTTP Request</h3>
+<p><code>PUT chat/channels/{channel}/users/{user}</code></p>
+<h3>Response Format</h3>
+<p>Returns the joined <a href="#chatchannel">ChatChannel</a>.</p>
+<aside class="notice">
+  This endpoint will only allow the joining of public channels initially.
+</aside>
+<!-- END_51e2add0d6e60e1b9fab84abab86056c -->
+<!-- START_ed6f2d2e964f63c05c2ecc359b290446 -->
+<h2>Leave Channel</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X DELETE "http://127.0.0.1:8000/api/v2/chat/channels/1/users/1" </code></pre>
+<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/chat/channels/1/users/1");
+
+let headers = {
+    "Authorization": "Bearer {{token}}"
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+}
+
+fetch(url, {
+    method: "DELETE",
+    headers: headers,
+})
+.then(response =&gt; response.json())
+.then(json =&gt; console.log(json));</code></pre>
+<blockquote>
+<p>Example response (204):</p>
+</blockquote>
+<pre><code class="language-json">[]</code></pre>
+<p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+This endpoint allows you to leave a public channel.</p>
+<h3>HTTP Request</h3>
+<p><code>DELETE chat/channels/{channel}/users/{user}</code></p>
+<h3>Response Format</h3>
+<p><em>empty response</em></p>
+<aside class="notice">
+  This endpoint will only allow the leaving of public channels initially.
+</aside>
+<!-- END_ed6f2d2e964f63c05c2ecc359b290446 -->
+<!-- START_31d2e2dffe4a4a11b61a82fd8ca59de7 -->
+<h2>Mark Channel as Read</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X PUT "http://127.0.0.1:8000/api/v2/chat/channels/1/mark-as-read/1" \
+    -H "Authorization: Bearer {{token}}" \
+    -H "Content-Type: application/json" \
+    -d '{"channel_id":"quidem","message_id":"et"}'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/chat/channels/1/mark-as-read/1");
+
+let headers = {
+    "Authorization": "Bearer {{token}}"
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+}
+
+let body = {
+    "channel_id": "quidem",
+    "message_id": "et"
+}
+
+fetch(url, {
+    method: "PUT",
+    headers: headers,
+    body: body
+})
+.then(response =&gt; response.json())
+.then(json =&gt; console.log(json));</code></pre>
+<blockquote>
+<p>Example response (204):</p>
+</blockquote>
+<pre><code class="language-json">[]</code></pre>
+<p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+This endpoint marks the channel as having being read up to the given <code>message_id</code>.</p>
+<h3>HTTP Request</h3>
+<p><code>PUT chat/channels/{channel}/mark-as-read/{message}</code></p>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>channel_id</td>
+<td>required</td>
+<td>optional</td>
+<td>The <code>channel_id</code> of the channel to mark as read</td>
+</tr>
+<tr>
+<td>message_id</td>
+<td>required</td>
+<td>optional</td>
+<td>The <code>message_id</code> of the message to mark as read up to</td>
+</tr>
+</tbody>
+</table>
+<h3>Response Format</h3>
+<p><em>empty response</em></p>
+<aside class="notice">
+  Note that the read marker cannot be moved backwards - i.e. if a channel has been marked as read up to <code>message_id = 12</code>, you cannot then set it backwards to <code>message_id = 10</code>. It will be rejected.
+</aside>
+<!-- END_31d2e2dffe4a4a11b61a82fd8ca59de7 -->
+<!-- START_1388f779104e1391cfdbcc780923e5ab -->
+<h2>Get Channel List</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET -G "http://127.0.0.1:8000/api/v2/chat/channels" </code></pre>
+<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/chat/channels");
+
+let headers = {
+    "Authorization": "Bearer {{token}}"
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+}
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+.then(response =&gt; response.json())
+.then(json =&gt; console.log(json));</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">[
+    {
+        "channel_id": 5,
+        "name": "#osu",
+        "description": "The official osu! channel (english only).",
+        "type": "public"
+    }
+]</code></pre>
+<p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+This endpoint returns a list of all joinable public channels.</p>
+<h3>HTTP Request</h3>
+<p><code>GET chat/channels</code></p>
+<h3>Response Format</h3>
+<p>Returns an array of <a href="#chatchannel">ChatChannel</a></p>
+<!-- END_1388f779104e1391cfdbcc780923e5ab -->
+<h1>Undocumented</h1>
+<!-- START_29ffb4659eefd0aea6258c0fefa5eb4c -->
+<h2>api/v2/changelog/{stream}/{build}</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET -G "http://127.0.0.1:8000/api/v2/changelog/1/1" </code></pre>
+<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/changelog/1/1");
+
+let headers = {
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+}
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+.then(response =&gt; response.json())
+.then(json =&gt; console.log(json));</code></pre>
+<blockquote>
+<p>Example response (401):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "authentication": "basic"
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET changelog/{stream}/{build}</code></p>
+<!-- END_29ffb4659eefd0aea6258c0fefa5eb4c -->
+<!-- START_68465f5b7078abd2010d6d52d26437ab -->
+<h2>api/v2/changelog</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET -G "http://127.0.0.1:8000/api/v2/changelog" </code></pre>
+<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/changelog");
+
+let headers = {
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+}
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+.then(response =&gt; response.json())
+.then(json =&gt; console.log(json));</code></pre>
+<blockquote>
+<p>Example response (401):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "authentication": "basic"
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET changelog</code></p>
+<!-- END_68465f5b7078abd2010d6d52d26437ab -->
+<!-- START_19bb540bae06440a8e37b76fdabb8890 -->
+<h2>api/v2/changelog/{changelog}</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET -G "http://127.0.0.1:8000/api/v2/changelog/1" </code></pre>
+<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/changelog/1");
+
+let headers = {
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+}
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+.then(response =&gt; response.json())
+.then(json =&gt; console.log(json));</code></pre>
+<blockquote>
+<p>Example response (401):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "authentication": "basic"
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET changelog/{changelog}</code></p>
+<!-- END_19bb540bae06440a8e37b76fdabb8890 -->
+<!-- START_9ef96cae4492f19bc8cbfe89af658f1c -->
+<h2>api/v2/rooms/{mode?}</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET -G "http://127.0.0.1:8000/api/v2/rooms/1" </code></pre>
+<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/rooms/1");
+
+let headers = {
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+}
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+.then(response =&gt; response.json())
+.then(json =&gt; console.log(json));</code></pre>
+<blockquote>
+<p>Example response (401):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "authentication": "basic"
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET rooms/{mode?}</code></p>
+<!-- END_9ef96cae4492f19bc8cbfe89af658f1c -->
+<!-- START_f822a354eea2aadfeb35d127ab341653 -->
+<h2>api/v2/rooms/{room}/users/{user}</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X PUT "http://127.0.0.1:8000/api/v2/rooms/1/users/1" </code></pre>
+<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/rooms/1/users/1");
+
+let headers = {
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+}
+
+fetch(url, {
+    method: "PUT",
+    headers: headers,
+})
+.then(response =&gt; response.json())
+.then(json =&gt; console.log(json));</code></pre>
+<h3>HTTP Request</h3>
+<p><code>PUT rooms/{room}/users/{user}</code></p>
+<!-- END_f822a354eea2aadfeb35d127ab341653 -->
+<!-- START_1f58289ecb0c3c9af110a8c3264044be -->
+<h2>api/v2/rooms/{room}/users/{user}</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X DELETE "http://127.0.0.1:8000/api/v2/rooms/1/users/1" </code></pre>
+<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/rooms/1/users/1");
+
+let headers = {
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+}
+
+fetch(url, {
+    method: "DELETE",
+    headers: headers,
+})
+.then(response =&gt; response.json())
+.then(json =&gt; console.log(json));</code></pre>
+<h3>HTTP Request</h3>
+<p><code>DELETE rooms/{room}/users/{user}</code></p>
+<!-- END_1f58289ecb0c3c9af110a8c3264044be -->
+<!-- START_87f01532dd407f9f7f469f1f3f8ae7be -->
+<h2>api/v2/rooms/{room}/leaderboard</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET -G "http://127.0.0.1:8000/api/v2/rooms/1/leaderboard" </code></pre>
+<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/rooms/1/leaderboard");
+
+let headers = {
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+}
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+.then(response =&gt; response.json())
+.then(json =&gt; console.log(json));</code></pre>
+<blockquote>
+<p>Example response (401):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "authentication": "basic"
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET rooms/{room}/leaderboard</code></p>
+<!-- END_87f01532dd407f9f7f469f1f3f8ae7be -->
+<!-- START_43b270f8bc98171c7aa6162a6a8c0453 -->
+<h2>api/v2/rooms/{room}/playlist/{playlist}/scores</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X POST "http://127.0.0.1:8000/api/v2/rooms/1/playlist/1/scores" </code></pre>
+<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/rooms/1/playlist/1/scores");
+
+let headers = {
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+})
+.then(response =&gt; response.json())
+.then(json =&gt; console.log(json));</code></pre>
+<h3>HTTP Request</h3>
+<p><code>POST rooms/{room}/playlist/{playlist}/scores</code></p>
+<!-- END_43b270f8bc98171c7aa6162a6a8c0453 -->
+<!-- START_a5400002cb11007dab4954c1838a8b9e -->
+<h2>api/v2/rooms/{room}/playlist/{playlist}/scores/{score}</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X PUT "http://127.0.0.1:8000/api/v2/rooms/1/playlist/1/scores/1" </code></pre>
+<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/rooms/1/playlist/1/scores/1");
+
+let headers = {
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+}
+
+fetch(url, {
+    method: "PUT",
+    headers: headers,
+})
+.then(response =&gt; response.json())
+.then(json =&gt; console.log(json));</code></pre>
+<h3>HTTP Request</h3>
+<p><code>PUT rooms/{room}/playlist/{playlist}/scores/{score}</code></p>
+<p><code>PATCH rooms/{room}/playlist/{playlist}/scores/{score}</code></p>
+<!-- END_a5400002cb11007dab4954c1838a8b9e -->
+<!-- START_0d3a14ddefeba5570e5a40971c58c987 -->
+<h2>api/v2/rooms</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X POST "http://127.0.0.1:8000/api/v2/rooms" </code></pre>
+<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/rooms");
+
+let headers = {
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+})
+.then(response =&gt; response.json())
+.then(json =&gt; console.log(json));</code></pre>
+<h3>HTTP Request</h3>
+<p><code>POST rooms</code></p>
+<!-- END_0d3a14ddefeba5570e5a40971c58c987 -->
+<!-- START_5c88d104fd68b3e911a23f79b0613cbf -->
+<h2>api/v2/rooms/{room}</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET -G "http://127.0.0.1:8000/api/v2/rooms/1" </code></pre>
+<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/rooms/1");
+
+let headers = {
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+}
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+.then(response =&gt; response.json())
+.then(json =&gt; console.log(json));</code></pre>
+<blockquote>
+<p>Example response (401):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "authentication": "basic"
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET rooms/{room}</code></p>
+<!-- END_5c88d104fd68b3e911a23f79b0613cbf -->
+<!-- START_e8db0d45da6534944d6e92a39f4c7a05 -->
+<h2>api/v2/beatmapsets/favourites</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET -G "http://127.0.0.1:8000/api/v2/beatmapsets/favourites" </code></pre>
+<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/beatmapsets/favourites");
+
+let headers = {
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+}
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+.then(response =&gt; response.json())
+.then(json =&gt; console.log(json));</code></pre>
+<blockquote>
+<p>Example response (401):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "authentication": "basic"
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET beatmapsets/favourites</code></p>
+<!-- END_e8db0d45da6534944d6e92a39f4c7a05 -->
+<!-- START_0cc12a89f0442c7cf0d1d0a5463c89c9 -->
+<h2>api/v2/scores/{mode}/{score}/download</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET -G "http://127.0.0.1:8000/api/v2/scores/1/1/download" </code></pre>
+<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/scores/1/1/download");
+
+let headers = {
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+}
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+.then(response =&gt; response.json())
+.then(json =&gt; console.log(json));</code></pre>
+<blockquote>
+<p>Example response (401):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "authentication": "basic"
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET scores/{mode}/{score}/download</code></p>
+<!-- END_0cc12a89f0442c7cf0d1d0a5463c89c9 -->
+<!-- START_49aabe3d06abdba9ae490907a103cb82 -->
+<h2>api/v2/beatmaps/{id}/scores</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET -G "http://127.0.0.1:8000/api/v2/beatmaps/1/scores" </code></pre>
+<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/beatmaps/1/scores");
+
+let headers = {
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+}
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+.then(response =&gt; response.json())
+.then(json =&gt; console.log(json));</code></pre>
+<blockquote>
+<p>Example response (401):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "authentication": "basic"
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET beatmaps/{id}/scores</code></p>
+<!-- END_49aabe3d06abdba9ae490907a103cb82 -->
+<!-- START_51fbfc3d213ebfd55d9f2c481eea4212 -->
+<h2>api/v2/beatmaps/lookup</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET -G "http://127.0.0.1:8000/api/v2/beatmaps/lookup" </code></pre>
+<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/beatmaps/lookup");
+
+let headers = {
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+}
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+.then(response =&gt; response.json())
+.then(json =&gt; console.log(json));</code></pre>
+<blockquote>
+<p>Example response (401):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "authentication": "basic"
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET beatmaps/lookup</code></p>
+<!-- END_51fbfc3d213ebfd55d9f2c481eea4212 -->
+<!-- START_d1734d89a6a7c2f7000cdb1b9742b3cf -->
+<h2>api/v2/beatmaps/{beatmap}</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET -G "http://127.0.0.1:8000/api/v2/beatmaps/1" </code></pre>
+<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/beatmaps/1");
+
+let headers = {
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+}
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+.then(response =&gt; response.json())
+.then(json =&gt; console.log(json));</code></pre>
+<blockquote>
+<p>Example response (401):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "authentication": "basic"
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET beatmaps/{beatmap}</code></p>
+<!-- END_d1734d89a6a7c2f7000cdb1b9742b3cf -->
+<!-- START_7285c1e19ab99fff4856638bd337f519 -->
+<h2>api/v2/beatmapsets/search/{filters?}</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET -G "http://127.0.0.1:8000/api/v2/beatmapsets/search/1" </code></pre>
+<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/beatmapsets/search/1");
+
+let headers = {
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+}
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+.then(response =&gt; response.json())
+.then(json =&gt; console.log(json));</code></pre>
+<blockquote>
+<p>Example response (401):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "authentication": "basic"
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET beatmapsets/search/{filters?}</code></p>
+<!-- END_7285c1e19ab99fff4856638bd337f519 -->
+<!-- START_66e1303eea94344ea9eb28704ec8edaf -->
+<h2>api/v2/beatmapsets/lookup</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET -G "http://127.0.0.1:8000/api/v2/beatmapsets/lookup" </code></pre>
+<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/beatmapsets/lookup");
+
+let headers = {
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+}
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+.then(response =&gt; response.json())
+.then(json =&gt; console.log(json));</code></pre>
+<blockquote>
+<p>Example response (401):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "authentication": "basic"
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET beatmapsets/lookup</code></p>
+<!-- END_66e1303eea94344ea9eb28704ec8edaf -->
+<!-- START_ca8448f67e76dd258ec54a90efbb6ef5 -->
+<h2>api/v2/beatmapsets/{beatmapset}/download</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET -G "http://127.0.0.1:8000/api/v2/beatmapsets/1/download" </code></pre>
+<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/beatmapsets/1/download");
+
+let headers = {
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+}
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+.then(response =&gt; response.json())
+.then(json =&gt; console.log(json));</code></pre>
+<blockquote>
+<p>Example response (401):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "authentication": "basic"
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET beatmapsets/{beatmapset}/download</code></p>
+<!-- END_ca8448f67e76dd258ec54a90efbb6ef5 -->
+<!-- START_4d92bd71af59f616aab99b75e283d444 -->
+<h2>api/v2/beatmapsets/{beatmapset}</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET -G "http://127.0.0.1:8000/api/v2/beatmapsets/1" </code></pre>
+<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/beatmapsets/1");
+
+let headers = {
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+}
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+.then(response =&gt; response.json())
+.then(json =&gt; console.log(json));</code></pre>
+<blockquote>
+<p>Example response (401):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "authentication": "basic"
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET beatmapsets/{beatmapset}</code></p>
+<!-- END_4d92bd71af59f616aab99b75e283d444 -->
+<!-- START_ba3ff32873fad0790c9cffb72d39a1e5 -->
+<h2>api/v2/friends</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET -G "http://127.0.0.1:8000/api/v2/friends" </code></pre>
+<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/friends");
+
+let headers = {
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+}
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+.then(response =&gt; response.json())
+.then(json =&gt; console.log(json));</code></pre>
+<blockquote>
+<p>Example response (401):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "authentication": "basic"
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET friends</code></p>
+<!-- END_ba3ff32873fad0790c9cffb72d39a1e5 -->
+<!-- START_578fcaadeb13d254977bdf2ac37676d8 -->
+<h2>api/v2/me</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET -G "http://127.0.0.1:8000/api/v2/me" </code></pre>
+<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/me");
+
+let headers = {
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+}
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+.then(response =&gt; response.json())
+.then(json =&gt; console.log(json));</code></pre>
+<blockquote>
+<p>Example response (401):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "authentication": "basic"
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET me</code></p>
+<!-- END_578fcaadeb13d254977bdf2ac37676d8 -->
+<!-- START_4dfcb6237ce2f30cf82ed7d8bd973b78 -->
+<h2>api/v2/me/download-quota-check</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET -G "http://127.0.0.1:8000/api/v2/me/download-quota-check" </code></pre>
+<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/me/download-quota-check");
+
+let headers = {
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+}
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+.then(response =&gt; response.json())
+.then(json =&gt; console.log(json));</code></pre>
+<blockquote>
+<p>Example response (401):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "authentication": "basic"
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET me/download-quota-check</code></p>
+<!-- END_4dfcb6237ce2f30cf82ed7d8bd973b78 -->
+<!-- START_741282cdda7dd0d737c5c7b46e2af0f7 -->
+<h2>api/v2/rankings/{mode}/{type}</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET -G "http://127.0.0.1:8000/api/v2/rankings/1/1" </code></pre>
+<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/rankings/1/1");
+
+let headers = {
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+}
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+.then(response =&gt; response.json())
+.then(json =&gt; console.log(json));</code></pre>
+<blockquote>
+<p>Example response (401):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "authentication": "basic"
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET rankings/{mode}/{type}</code></p>
+<!-- END_741282cdda7dd0d737c5c7b46e2af0f7 -->
+<!-- START_d733b95f42b2394ca8bdd7193c4655a6 -->
+<h2>api/v2/users/{user}/kudosu</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET -G "http://127.0.0.1:8000/api/v2/users/1/kudosu" </code></pre>
+<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/users/1/kudosu");
+
+let headers = {
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+}
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+.then(response =&gt; response.json())
+.then(json =&gt; console.log(json));</code></pre>
+<blockquote>
+<p>Example response (401):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "authentication": "basic"
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET users/{user}/kudosu</code></p>
+<!-- END_d733b95f42b2394ca8bdd7193c4655a6 -->
+<!-- START_b3ea131700a24f833394c819b0147eaf -->
+<h2>api/v2/users/{user}/scores/{type}</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET -G "http://127.0.0.1:8000/api/v2/users/1/scores/1" </code></pre>
+<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/users/1/scores/1");
+
+let headers = {
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+}
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+.then(response =&gt; response.json())
+.then(json =&gt; console.log(json));</code></pre>
+<blockquote>
+<p>Example response (401):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "authentication": "basic"
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET users/{user}/scores/{type}</code></p>
+<!-- END_b3ea131700a24f833394c819b0147eaf -->
+<!-- START_c658095d761a0ea130ca450990649c1a -->
+<h2>api/v2/users/{user}/beatmapsets/{type}</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET -G "http://127.0.0.1:8000/api/v2/users/1/beatmapsets/1" </code></pre>
+<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/users/1/beatmapsets/1");
+
+let headers = {
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+}
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+.then(response =&gt; response.json())
+.then(json =&gt; console.log(json));</code></pre>
+<blockquote>
+<p>Example response (401):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "authentication": "basic"
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET users/{user}/beatmapsets/{type}</code></p>
+<!-- END_c658095d761a0ea130ca450990649c1a -->
+<!-- START_1f111f3c58f8f97d865dafdb625e6470 -->
+<h2>api/v2/users/{user}/recent_activity</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET -G "http://127.0.0.1:8000/api/v2/users/1/recent_activity" </code></pre>
+<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/users/1/recent_activity");
+
+let headers = {
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+}
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+.then(response =&gt; response.json())
+.then(json =&gt; console.log(json));</code></pre>
+<blockquote>
+<p>Example response (401):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "authentication": "basic"
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET users/{user}/recent_activity</code></p>
+<!-- END_1f111f3c58f8f97d865dafdb625e6470 -->
+<!-- START_5d096de03e7123255179adb55b1554b4 -->
+<h2>api/v2/users/{user}/{mode?}</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET -G "http://127.0.0.1:8000/api/v2/users/1/1" </code></pre>
+<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/users/1/1");
+
+let headers = {
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+}
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+.then(response =&gt; response.json())
+.then(json =&gt; console.log(json));</code></pre>
+<blockquote>
+<p>Example response (401):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "authentication": "basic"
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET users/{user}/{mode?}</code></p>
+<!-- END_5d096de03e7123255179adb55b1554b4 --><h1>Notification Websocket</h1>
+<h2>Connection</h2>
+<pre><code class="language-shell">wscat -c "{notification_endpoint}"
+  -H "Authorization: Bearer {{token}}"</code></pre>
+<blockquote>
+<p>The above command will wait and display new notifications as they arrive</p>
+</blockquote>
+<p>This endpoint allows you to receive notifications without constantly polling the server. Correct notification will be a JSON string with at least <code>event</code> field:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>event</td>
+<td>string</td>
+<td>See below</td>
+</tr>
+</tbody>
+</table>
+<p>Events:</p>
+<ul>
+<li><code>logout</code>: user session using same authentication key has been logged out (not yet implemented for OAuth authentication)</li>
+<li><code>new</code>: new notification</li>
+<li><code>read</code>: notification has been read</li>
+</ul>
+<h2><code>logout</code> event</h2>
+<p>Server will disconnect session after sending this event so don't try to reconnect.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>event</td>
+<td>string</td>
+<td><code>logout</code></td>
+</tr>
+</tbody>
+</table>
+<h2><code>new</code> event</h2>
+<p>New notification. See <a href="#notification">Notification</a> object for notification types.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>event</td>
+<td>string</td>
+<td><code>new</code></td>
+</tr>
+<tr>
+<td>data</td>
+<td><a href="#notification">Notification</a></td>
+</tr>
+</tbody>
+</table>
+<h2><code>read</code> event</h2>
+<p>Notification has been read.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>event</td>
+<td>string</td>
+<td><code>read</code></td>
+</tr>
+<tr>
+<td>ids</td>
+<td>number[]</td>
+<td>id of Notifications which are read</td>
+</tr>
+</tbody>
+</table><h1>Object Structures</h1>
+<h2>ChatChannel</h2>
+<pre><code class="language-json">{
+  "channel_id": 1337,
+  "name": "test channel",
+  "description": "wheeeee",
+  "icon": "/images/layout/avatar-guest@2x.png",
+  "type": "GROUP",
+  "last_read_id": 9150005005,
+  "last_message_id": 9150005005,
+  "users": [
+    2,
+    3,
+    102
+  ]
+}</code></pre>
+<p>Represents an individual chat &quot;channel&quot; in the game.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>channel_id</td>
+<td>number</td>
+</tr>
+<tr>
+<td>name</td>
+<td>string</td>
+</tr>
+<tr>
+<td>description</td>
+<td>string?</td>
+</tr>
+<tr>
+<td>icon*</td>
+<td>string</td>
+<td>display icon for the channel</td>
+</tr>
+<tr>
+<td>type</td>
+<td>string</td>
+<td>see channel types below</td>
+</tr>
+<tr>
+<td>last_read_id*</td>
+<td>number?</td>
+<td><code>message_id</code> of last message read (only returned in presence responses)</td>
+</tr>
+<tr>
+<td>last_message_id*</td>
+<td>number?</td>
+<td><code>message_id</code> of last known message (only returned in presence responses)</td>
+</tr>
+<tr>
+<td>users*</td>
+<td>number[]?</td>
+<td>array of <code>user_id</code> that are in the channel (not included for <code>PUBLIC</code> channels)</td>
+</tr>
+</tbody>
+</table>
+<h3>Channel Types</h3>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Permission Check for Joining/Messaging</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PUBLIC</td>
+</tr>
+<tr>
+<td>PRIVATE</td>
+<td>is player in the allowed groups? (channel.allowed_groups)</td>
+</tr>
+<tr>
+<td>MULTIPLAYER</td>
+<td>is player currently in the mp game?</td>
+</tr>
+<tr>
+<td>SPECTATOR</td>
+</tr>
+<tr>
+<td>TEMPORARY</td>
+<td><em>deprecated</em></td>
+</tr>
+<tr>
+<td>PM</td>
+<td>see below (user_channels)</td>
+</tr>
+<tr>
+<td>GROUP</td>
+<td>is player in channel? (user_channels)</td>
+</tr>
+</tbody>
+</table>
+<p>For PMs, two factors are taken into account:</p>
+<ul>
+<li>Is either user blocking the other? If so, deny.</li>
+<li>Does the target only accept PMs from friends? Is the current user a friend? If not, deny.</li>
+</ul>
+<aside class="notice">
+Public channels, group chats and private DMs are all considered "channels".
+</aside>
+<h2>ChatMessage</h2>
+<pre><code class="language-json">{
+  "message_id": 9150005004,
+  "sender_id": 2,
+  "channel_id": 5,
+  "timestamp": "2018-07-06T06:33:34+00:00",
+  "content": "i am a lazerface",
+  "is_action": 0,
+  "sender": {
+    "id": 2,
+    "username": "peppy",
+    "profile_colour": "#3366FF",
+    "avatar_url": "https://a.ppy.sh/2?1519081077.png",
+    "country_code": "AU",
+    "is_active": true,
+    "is_bot": false,
+    "is_online": true,
+    "is_supporter": true
+  }
+}</code></pre>
+<p>Represents an individual Message within a <a href="#chatchannel">ChatChannel</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>message_id</td>
+<td>number</td>
+<td>unique identifier for message</td>
+</tr>
+<tr>
+<td>sender_id</td>
+<td>number</td>
+<td><code>user_id</code> of the sender</td>
+</tr>
+<tr>
+<td>channel_id</td>
+<td>number</td>
+<td><code>channel_id</code> of where the message was sent</td>
+</tr>
+<tr>
+<td>timestamp</td>
+<td>string</td>
+<td>when the message was sent, ISO-8601</td>
+</tr>
+<tr>
+<td>content</td>
+<td>string</td>
+<td>message content</td>
+</tr>
+<tr>
+<td>is_action</td>
+<td>boolean</td>
+<td>was this an action? i.e. <code>/me dances</code></td>
+</tr>
+<tr>
+<td>sender</td>
+<td><a href="#usercompact">UserCompact</a></td>
+<td>embeded UserCompact object to save additional api lookups</td>
+</tr>
+</tbody>
+</table>
+<h2>Notification</h2>
+<pre><code class="language-json">{
+  "id": 1,
+  "name": "channel_message",
+  "created_at": "2019-04-24T07:12:43+00:00",
+  "object_type": "channel",
+  "object_id": 1,
+  "source_user_id": 1,
+  "is_read": true,
+  "details": {
+    "username": "someone",
+    ...
+  }
+}</code></pre>
+<p>Represents a notification object.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>number</td>
+</tr>
+<tr>
+<td>name</td>
+<td>string</td>
+<td>Name of the event</td>
+</tr>
+<tr>
+<td>created_at</td>
+<td>string</td>
+<td>ISO 8601 date</td>
+</tr>
+<tr>
+<td>object_type</td>
+<td>string</td>
+</tr>
+<tr>
+<td>object_id</td>
+<td>number</td>
+</tr>
+<tr>
+<td>source_user_id</td>
+<td>number?</td>
+</tr>
+<tr>
+<td>is_read</td>
+<td>boolean</td>
+</tr>
+<tr>
+<td>details</td>
+<td>object</td>
+<td><code>message_id</code> of last known message (only returned in presence responses)</td>
+</tr>
+</tbody>
+</table>
+<h3>Event Names</h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>beatmapset_discussion_lock</td>
+<td>Discussion on beatmap has been locked</td>
+</tr>
+<tr>
+<td>beatmapset_discussion_post_new</td>
+<td>New discussion post on beatmap</td>
+</tr>
+<tr>
+<td>beatmapset_discussion_unlock</td>
+<td>Discussion on beatmap has been unlocked</td>
+</tr>
+<tr>
+<td>beatmapset_disqualify</td>
+<td>Beatmap was disqualified</td>
+</tr>
+<tr>
+<td>beatmapset_love</td>
+<td>Beatmap was promoted to loved</td>
+</tr>
+<tr>
+<td>beatmapset_nominate</td>
+<td>Beatmap was nominated</td>
+</tr>
+<tr>
+<td>beatmapset_qualify</td>
+<td>Beatmap has gained enough nominations and entered the ranking queue</td>
+</tr>
+<tr>
+<td>beatmapset_reset_nominations</td>
+<td>Nomination of beatmap was reset</td>
+</tr>
+<tr>
+<td>channel_message</td>
+<td>Someone sent chat message</td>
+</tr>
+<tr>
+<td>forum_topic_reply</td>
+<td>Someone replied on forum topic</td>
+</tr>
+</tbody>
+</table>
+<h3><code>beatmapset_discussion_lock</code></h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>object_id</td>
+<td>number</td>
+<td>Beatmapset id</td>
+</tr>
+<tr>
+<td>object_type</td>
+<td>string</td>
+<td><code>beatmapset</code></td>
+</tr>
+<tr>
+<td>source_user_id</td>
+<td>number</td>
+<td>User who locked discussion</td>
+</tr>
+</tbody>
+</table>
+<p>Details object:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>cover_url</td>
+<td>string</td>
+<td>Beatmap cover</td>
+</tr>
+<tr>
+<td>title</td>
+<td>string</td>
+<td>Beatmap title</td>
+</tr>
+<tr>
+<td>username</td>
+<td>string</td>
+<td>Username of <code>source_user_id</code></td>
+</tr>
+</tbody>
+</table>
+<h3><code>beatmapset_discussion_post_new</code></h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>object_id</td>
+<td>number</td>
+<td>Beatmapset id</td>
+</tr>
+<tr>
+<td>object_type</td>
+<td>string</td>
+<td><code>beatmapset</code></td>
+</tr>
+<tr>
+<td>source_user_id</td>
+<td>number</td>
+<td>Poster of the discussion</td>
+</tr>
+</tbody>
+</table>
+<p>Details object:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>title</td>
+<td>string</td>
+<td>Beatmap title</td>
+</tr>
+<tr>
+<td>cover_url</td>
+<td>string</td>
+<td>Beatmap cover</td>
+</tr>
+<tr>
+<td>discussion_id</td>
+<td>number</td>
+</tr>
+<tr>
+<td>post_id</td>
+<td>number</td>
+</tr>
+<tr>
+<td>beatmap_id</td>
+<td>number?</td>
+<td><code>null</code> if posted to general all</td>
+</tr>
+<tr>
+<td>username</td>
+<td>string</td>
+<td>Username of <code>source_user_id</code></td>
+</tr>
+</tbody>
+</table>
+<h3><code>beatmapset_discussion_unlock</code></h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>object_id</td>
+<td>number</td>
+<td>Beatmapset id</td>
+</tr>
+<tr>
+<td>object_type</td>
+<td>string</td>
+<td><code>beatmapset</code></td>
+</tr>
+<tr>
+<td>source_user_id</td>
+<td>number</td>
+<td>User who unlocked discussion</td>
+</tr>
+</tbody>
+</table>
+<p>Details object:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>title</td>
+<td>string</td>
+<td>Beatmap title</td>
+</tr>
+<tr>
+<td>cover_url</td>
+<td>string</td>
+<td>Beatmap cover</td>
+</tr>
+<tr>
+<td>username</td>
+<td>string</td>
+<td>Username of <code>source_user_id</code></td>
+</tr>
+</tbody>
+</table>
+<h3><code>beatmapset_disqualify</code></h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>object_id</td>
+<td>number</td>
+<td>Beatmapset id</td>
+</tr>
+<tr>
+<td>object_type</td>
+<td>string</td>
+<td><code>beatmapset</code></td>
+</tr>
+<tr>
+<td>source_user_id</td>
+<td>number</td>
+<td>User who disqualified beatmapset</td>
+</tr>
+</tbody>
+</table>
+<p>Details object:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>title</td>
+<td>string</td>
+<td>Beatmap title</td>
+</tr>
+<tr>
+<td>cover_url</td>
+<td>string</td>
+<td>Beatmap cover</td>
+</tr>
+<tr>
+<td>username</td>
+<td>string</td>
+<td>Username of <code>source_user_id</code></td>
+</tr>
+</tbody>
+</table>
+<h3><code>beatmapset_love</code></h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>object_id</td>
+<td>number</td>
+<td>Beatmapset id</td>
+</tr>
+<tr>
+<td>object_type</td>
+<td>string</td>
+<td><code>beatmapset</code></td>
+</tr>
+<tr>
+<td>source_user_id</td>
+<td>number</td>
+<td>User who promoted beatmapset to loved</td>
+</tr>
+</tbody>
+</table>
+<p>Details object:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>title</td>
+<td>string</td>
+<td>Beatmap title</td>
+</tr>
+<tr>
+<td>cover_url</td>
+<td>string</td>
+<td>Beatmap cover</td>
+</tr>
+<tr>
+<td>username</td>
+<td>string</td>
+<td>Username of <code>source_user_id</code></td>
+</tr>
+</tbody>
+</table>
+<h4><code>beatmapset_nominate</code></h4>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>object_id</td>
+<td>number</td>
+<td>Beatmapset id</td>
+</tr>
+<tr>
+<td>object_type</td>
+<td>string</td>
+<td><code>beatmapset</code></td>
+</tr>
+<tr>
+<td>source_user_id</td>
+<td>number</td>
+<td>User who nominated beatmapset</td>
+</tr>
+</tbody>
+</table>
+<p>Details object:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>title</td>
+<td>string</td>
+<td>Beatmap title</td>
+</tr>
+<tr>
+<td>cover_url</td>
+<td>string</td>
+<td>Beatmap cover</td>
+</tr>
+<tr>
+<td>username</td>
+<td>string</td>
+<td>Username of <code>source_user_id</code></td>
+</tr>
+</tbody>
+</table>
+<h4><code>beatmapset_qualify</code></h4>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>object_id</td>
+<td>number</td>
+<td>Beatmapset id</td>
+</tr>
+<tr>
+<td>object_type</td>
+<td>string</td>
+<td><code>beatmapset</code></td>
+</tr>
+<tr>
+<td>source_user_id</td>
+<td>number</td>
+<td>User whom beatmapset nomination triggered qualification</td>
+</tr>
+</tbody>
+</table>
+<p>Details object:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>title</td>
+<td>string</td>
+<td>Beatmap title</td>
+</tr>
+<tr>
+<td>cover_url</td>
+<td>string</td>
+<td>Beatmap cover</td>
+</tr>
+<tr>
+<td>username</td>
+<td>string</td>
+<td>Username of <code>source_user_id</code></td>
+</tr>
+</tbody>
+</table>
+<h4><code>beatmapset_reset_nominations</code></h4>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>object_id</td>
+<td>number</td>
+<td>Beatmapset id</td>
+</tr>
+<tr>
+<td>object_type</td>
+<td>string</td>
+<td><code>beatmapset</code></td>
+</tr>
+<tr>
+<td>source_user_id</td>
+<td>number</td>
+<td>User who triggered nomination reset</td>
+</tr>
+</tbody>
+</table>
+<p>Details object:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>title</td>
+<td>string</td>
+<td>Beatmap title</td>
+</tr>
+<tr>
+<td>cover_url</td>
+<td>string</td>
+<td>Beatmap cover</td>
+</tr>
+<tr>
+<td>username</td>
+<td>string</td>
+<td>Username of <code>source_user_id</code></td>
+</tr>
+</tbody>
+</table>
+<h4><code>channel_message</code></h4>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>object_id</td>
+<td>number</td>
+<td>Channel id</td>
+</tr>
+<tr>
+<td>object_type</td>
+<td>string</td>
+<td><code>channel</code></td>
+</tr>
+<tr>
+<td>source_user_id</td>
+<td>number</td>
+<td>User who posted message</td>
+</tr>
+</tbody>
+</table>
+<p>Details object:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>title</td>
+<td>string</td>
+<td>Up to 36 characters of the message (ends with <code>...</code> when exceeding 36 characters)</td>
+</tr>
+<tr>
+<td>cover_url</td>
+<td>string</td>
+<td>Avatar of <code>source_user_id</code></td>
+</tr>
+<tr>
+<td>username</td>
+<td>string</td>
+<td>Username of <code>source_user_id</code></td>
+</tr>
+</tbody>
+</table>
+<h4><code>forum_topic_reply</code></h4>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>object_id</td>
+<td>number</td>
+<td>Topic id</td>
+</tr>
+<tr>
+<td>object_type</td>
+<td>string</td>
+<td><code>forum_topic</code></td>
+</tr>
+<tr>
+<td>source_user_id</td>
+<td>number</td>
+<td>User who posted message</td>
+</tr>
+</tbody>
+</table>
+<p>Details object:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>title</td>
+<td>string</td>
+<td>Title of the replied topic</td>
+</tr>
+<tr>
+<td>cover_url</td>
+<td>string</td>
+<td>Topic cover</td>
+</tr>
+<tr>
+<td>post_id</td>
+<td>number</td>
+<td>Post id</td>
+</tr>
+<tr>
+<td>username</td>
+<td>string?</td>
+<td>Username of <code>source_user_id</code></td>
+</tr>
+</tbody>
+</table>
+<h2>User</h2>
+<pre><code class="language-json">{
+  "💃": true,
+}</code></pre>
+<p>Represents a User.</p>
+<aside class="notice">TODO: This &gt;.&gt;</aside>
+<h2>UserCompact</h2>
+<pre><code class="language-json">{
+  "id": 2,
+  "username": "peppy",
+  "profile_colour": "#3366FF",
+  "avatar_url": "https://a.ppy.sh/2?1519081077.png",
+  "country_code": "AU",
+  "is_active": true,
+  "is_bot": false,
+  "is_online": true,
+  "is_supporter": true
+}</code></pre>
+<p>This is a subset of the above <a href="#user">User</a>, mainly used for embedding in certain responses to save additional api lookups.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>number</td>
+<td>unique identifier for user</td>
+</tr>
+<tr>
+<td>username</td>
+<td>string</td>
+<td>user's display name</td>
+</tr>
+<tr>
+<td>profile_colour</td>
+<td>string</td>
+<td>colour of username/profile highlight, hex code (e.g. <code>#333333</code>)</td>
+</tr>
+<tr>
+<td>avatar_url</td>
+<td>string</td>
+<td>url of user's avatar</td>
+</tr>
+<tr>
+<td>country_code</td>
+<td>string</td>
+<td>two-letter code representing user's country</td>
+</tr>
+<tr>
+<td>is_active</td>
+<td>boolean</td>
+<td>has this account been active in the last x months?</td>
+</tr>
+<tr>
+<td>is_bot</td>
+<td>boolean</td>
+<td>is this a bot account?</td>
+</tr>
+<tr>
+<td>is_online</td>
+<td>boolean</td>
+<td>is the user currently online? (either on lazer or the new website)</td>
+</tr>
+<tr>
+<td>is_supporter</td>
+<td>boolean</td>
+<td>does this user have supporter?</td>
+</tr>
+</tbody>
+</table>
+      </div>
+      <div class="dark-box">
+                        <div class="lang-selector">
+                                    <a href="#" data-language-name="bash">bash</a>
+                                    <a href="#" data-language-name="javascript">javascript</a>
+                              </div>
+                </div>
+    </div>
+  </body>
+</html>
