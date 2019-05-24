@@ -49,7 +49,7 @@
 <p>Welcome to the osu!api. You can use this API to get information on various circles and those who click them.</p>
 <p>You can view code examples in the dark area to the right.</p>
 <p>The API and this documentation are a work-in-progress and likely contains errors.</p>
-<p><a href="http://127.0.0.1:8000/docs/collection.json">Get Postman Collection</a></p>
+<p><a href="http://on.nanaya.pro/docs/collection.json">Get Postman Collection</a></p>
 <!-- END_INFO -->
 <h1>Chat</h1>
 <!-- START_959a851f02384dc7cbff5b508f31e142 -->
@@ -57,12 +57,12 @@
 <blockquote>
 <p>Example request:</p>
 </blockquote>
-<pre><code class="language-bash">curl -X POST "http://127.0.0.1:8000/api/v2/chat/new" \
+<pre><code class="language-bash">curl -X POST "https://on.nanaya.pro/api/v2/chat/new" \
     -H "Authorization: Bearer {{token}}" \
     -H "Content-Type: application/json" \
-    -d '{"target_id":1,"message":"et","is_action":true}'
+    -d '{"target_id":18,"message":"enim","is_action":true}'
 </code></pre>
-<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/chat/new");
+<pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/chat/new");
 
 let headers = {
     "Authorization": "Bearer {{token}}"
@@ -71,8 +71,8 @@ let headers = {
 }
 
 let body = {
-    "target_id": 1,
-    "message": "et",
+    "target_id": 18,
+    "message": "enim",
     "is_action": true
 }
 
@@ -197,13 +197,13 @@ This endpoint allows you to create a new PM channel.</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
-<pre><code class="language-bash">curl -X GET -G "http://127.0.0.1:8000/api/v2/chat/updates" </code></pre>
-<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/chat/updates");
+<pre><code class="language-bash">curl -X GET -G "https://on.nanaya.pro/api/v2/chat/updates" </code></pre>
+<pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/chat/updates");
 
     let params = {
-            "since": "provident",
-            "channel_id": "voluptas",
-            "limit": "16",
+            "since": "minus",
+            "channel_id": "asperiores",
+            "limit": "12",
         };
     Object.keys(params).forEach(key =&gt; url.searchParams.append(key, params[key]));
 
@@ -345,8 +345,8 @@ This endpoint returns new messages since the given <code>message_id</code> along
 <blockquote>
 <p>Example request:</p>
 </blockquote>
-<pre><code class="language-bash">curl -X GET -G "http://127.0.0.1:8000/api/v2/chat/presence" </code></pre>
-<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/chat/presence");
+<pre><code class="language-bash">curl -X GET -G "https://on.nanaya.pro/api/v2/chat/presence" </code></pre>
+<pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/chat/presence");
 
 let headers = {
     "Accept": "application/json",
@@ -373,12 +373,12 @@ fetch(url, {
 <blockquote>
 <p>Example request:</p>
 </blockquote>
-<pre><code class="language-bash">curl -X GET -G "http://127.0.0.1:8000/api/v2/chat/channels/1/messages" </code></pre>
-<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/chat/channels/1/messages");
+<pre><code class="language-bash">curl -X GET -G "https://on.nanaya.pro/api/v2/chat/channels/1/messages" </code></pre>
+<pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/chat/channels/1/messages");
 
     let params = {
-            "channel_id": "repudiandae",
-            "limit": "13",
+            "channel_id": "quis",
+            "limit": "7",
         };
     Object.keys(params).forEach(key =&gt; url.searchParams.append(key, params[key]));
 
@@ -471,11 +471,11 @@ This endpoint returns the chat messages for a specific channel.</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
-<pre><code class="language-bash">curl -X POST "http://127.0.0.1:8000/api/v2/chat/channels/1/messages" </code></pre>
-<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/chat/channels/1/messages");
+<pre><code class="language-bash">curl -X POST "https://on.nanaya.pro/api/v2/chat/channels/1/messages" </code></pre>
+<pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/chat/channels/1/messages");
 
     let params = {
-            "channel_id": "ea",
+            "channel_id": "id",
         };
     Object.keys(params).forEach(key =&gt; url.searchParams.append(key, params[key]));
 
@@ -545,8 +545,8 @@ This endpoint returns the chat messages for a specific channel.</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
-<pre><code class="language-bash">curl -X PUT "http://127.0.0.1:8000/api/v2/chat/channels/1/users/1" </code></pre>
-<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/chat/channels/1/users/1");
+<pre><code class="language-bash">curl -X PUT "https://on.nanaya.pro/api/v2/chat/channels/1/users/1" </code></pre>
+<pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/chat/channels/1/users/1");
 
 let headers = {
     "Authorization": "Bearer {{token}}"
@@ -584,8 +584,8 @@ This endpoint allows you to join a public channel.</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
-<pre><code class="language-bash">curl -X DELETE "http://127.0.0.1:8000/api/v2/chat/channels/1/users/1" </code></pre>
-<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/chat/channels/1/users/1");
+<pre><code class="language-bash">curl -X DELETE "https://on.nanaya.pro/api/v2/chat/channels/1/users/1" </code></pre>
+<pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/chat/channels/1/users/1");
 
 let headers = {
     "Authorization": "Bearer {{token}}"
@@ -618,12 +618,12 @@ This endpoint allows you to leave a public channel.</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
-<pre><code class="language-bash">curl -X PUT "http://127.0.0.1:8000/api/v2/chat/channels/1/mark-as-read/1" \
+<pre><code class="language-bash">curl -X PUT "https://on.nanaya.pro/api/v2/chat/channels/1/mark-as-read/1" \
     -H "Authorization: Bearer {{token}}" \
     -H "Content-Type: application/json" \
-    -d '{"channel_id":"quidem","message_id":"et"}'
+    -d '{"channel_id":"est","message_id":"earum"}'
 </code></pre>
-<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/chat/channels/1/mark-as-read/1");
+<pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/chat/channels/1/mark-as-read/1");
 
 let headers = {
     "Authorization": "Bearer {{token}}"
@@ -632,8 +632,8 @@ let headers = {
 }
 
 let body = {
-    "channel_id": "quidem",
-    "message_id": "et"
+    "channel_id": "est",
+    "message_id": "earum"
 }
 
 fetch(url, {
@@ -687,8 +687,8 @@ This endpoint marks the channel as having being read up to the given <code>messa
 <blockquote>
 <p>Example request:</p>
 </blockquote>
-<pre><code class="language-bash">curl -X GET -G "http://127.0.0.1:8000/api/v2/chat/channels" </code></pre>
-<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/chat/channels");
+<pre><code class="language-bash">curl -X GET -G "https://on.nanaya.pro/api/v2/chat/channels" </code></pre>
+<pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/chat/channels");
 
 let headers = {
     "Authorization": "Bearer {{token}}"
@@ -726,8 +726,8 @@ This endpoint returns a list of all joinable public channels.</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
-<pre><code class="language-bash">curl -X GET -G "http://127.0.0.1:8000/api/v2/changelog/1/1" </code></pre>
-<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/changelog/1/1");
+<pre><code class="language-bash">curl -X GET -G "https://on.nanaya.pro/api/v2/changelog/1/1" </code></pre>
+<pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/changelog/1/1");
 
 let headers = {
     "Accept": "application/json",
@@ -754,8 +754,8 @@ fetch(url, {
 <blockquote>
 <p>Example request:</p>
 </blockquote>
-<pre><code class="language-bash">curl -X GET -G "http://127.0.0.1:8000/api/v2/changelog" </code></pre>
-<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/changelog");
+<pre><code class="language-bash">curl -X GET -G "https://on.nanaya.pro/api/v2/changelog" </code></pre>
+<pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/changelog");
 
 let headers = {
     "Accept": "application/json",
@@ -782,8 +782,8 @@ fetch(url, {
 <blockquote>
 <p>Example request:</p>
 </blockquote>
-<pre><code class="language-bash">curl -X GET -G "http://127.0.0.1:8000/api/v2/changelog/1" </code></pre>
-<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/changelog/1");
+<pre><code class="language-bash">curl -X GET -G "https://on.nanaya.pro/api/v2/changelog/1" </code></pre>
+<pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/changelog/1");
 
 let headers = {
     "Accept": "application/json",
@@ -810,8 +810,8 @@ fetch(url, {
 <blockquote>
 <p>Example request:</p>
 </blockquote>
-<pre><code class="language-bash">curl -X GET -G "http://127.0.0.1:8000/api/v2/rooms/1" </code></pre>
-<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/rooms/1");
+<pre><code class="language-bash">curl -X GET -G "https://on.nanaya.pro/api/v2/rooms/1" </code></pre>
+<pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/rooms/1");
 
 let headers = {
     "Accept": "application/json",
@@ -838,8 +838,8 @@ fetch(url, {
 <blockquote>
 <p>Example request:</p>
 </blockquote>
-<pre><code class="language-bash">curl -X PUT "http://127.0.0.1:8000/api/v2/rooms/1/users/1" </code></pre>
-<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/rooms/1/users/1");
+<pre><code class="language-bash">curl -X PUT "https://on.nanaya.pro/api/v2/rooms/1/users/1" </code></pre>
+<pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/rooms/1/users/1");
 
 let headers = {
     "Accept": "application/json",
@@ -860,8 +860,8 @@ fetch(url, {
 <blockquote>
 <p>Example request:</p>
 </blockquote>
-<pre><code class="language-bash">curl -X DELETE "http://127.0.0.1:8000/api/v2/rooms/1/users/1" </code></pre>
-<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/rooms/1/users/1");
+<pre><code class="language-bash">curl -X DELETE "https://on.nanaya.pro/api/v2/rooms/1/users/1" </code></pre>
+<pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/rooms/1/users/1");
 
 let headers = {
     "Accept": "application/json",
@@ -882,8 +882,8 @@ fetch(url, {
 <blockquote>
 <p>Example request:</p>
 </blockquote>
-<pre><code class="language-bash">curl -X GET -G "http://127.0.0.1:8000/api/v2/rooms/1/leaderboard" </code></pre>
-<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/rooms/1/leaderboard");
+<pre><code class="language-bash">curl -X GET -G "https://on.nanaya.pro/api/v2/rooms/1/leaderboard" </code></pre>
+<pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/rooms/1/leaderboard");
 
 let headers = {
     "Accept": "application/json",
@@ -910,8 +910,8 @@ fetch(url, {
 <blockquote>
 <p>Example request:</p>
 </blockquote>
-<pre><code class="language-bash">curl -X POST "http://127.0.0.1:8000/api/v2/rooms/1/playlist/1/scores" </code></pre>
-<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/rooms/1/playlist/1/scores");
+<pre><code class="language-bash">curl -X POST "https://on.nanaya.pro/api/v2/rooms/1/playlist/1/scores" </code></pre>
+<pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/rooms/1/playlist/1/scores");
 
 let headers = {
     "Accept": "application/json",
@@ -932,8 +932,8 @@ fetch(url, {
 <blockquote>
 <p>Example request:</p>
 </blockquote>
-<pre><code class="language-bash">curl -X PUT "http://127.0.0.1:8000/api/v2/rooms/1/playlist/1/scores/1" </code></pre>
-<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/rooms/1/playlist/1/scores/1");
+<pre><code class="language-bash">curl -X PUT "https://on.nanaya.pro/api/v2/rooms/1/playlist/1/scores/1" </code></pre>
+<pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/rooms/1/playlist/1/scores/1");
 
 let headers = {
     "Accept": "application/json",
@@ -955,8 +955,8 @@ fetch(url, {
 <blockquote>
 <p>Example request:</p>
 </blockquote>
-<pre><code class="language-bash">curl -X POST "http://127.0.0.1:8000/api/v2/rooms" </code></pre>
-<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/rooms");
+<pre><code class="language-bash">curl -X POST "https://on.nanaya.pro/api/v2/rooms" </code></pre>
+<pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/rooms");
 
 let headers = {
     "Accept": "application/json",
@@ -977,8 +977,8 @@ fetch(url, {
 <blockquote>
 <p>Example request:</p>
 </blockquote>
-<pre><code class="language-bash">curl -X GET -G "http://127.0.0.1:8000/api/v2/rooms/1" </code></pre>
-<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/rooms/1");
+<pre><code class="language-bash">curl -X GET -G "https://on.nanaya.pro/api/v2/rooms/1" </code></pre>
+<pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/rooms/1");
 
 let headers = {
     "Accept": "application/json",
@@ -1005,8 +1005,8 @@ fetch(url, {
 <blockquote>
 <p>Example request:</p>
 </blockquote>
-<pre><code class="language-bash">curl -X GET -G "http://127.0.0.1:8000/api/v2/beatmapsets/favourites" </code></pre>
-<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/beatmapsets/favourites");
+<pre><code class="language-bash">curl -X GET -G "https://on.nanaya.pro/api/v2/beatmapsets/favourites" </code></pre>
+<pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/beatmapsets/favourites");
 
 let headers = {
     "Accept": "application/json",
@@ -1033,8 +1033,8 @@ fetch(url, {
 <blockquote>
 <p>Example request:</p>
 </blockquote>
-<pre><code class="language-bash">curl -X GET -G "http://127.0.0.1:8000/api/v2/scores/1/1/download" </code></pre>
-<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/scores/1/1/download");
+<pre><code class="language-bash">curl -X GET -G "https://on.nanaya.pro/api/v2/scores/1/1/download" </code></pre>
+<pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/scores/1/1/download");
 
 let headers = {
     "Accept": "application/json",
@@ -1061,8 +1061,8 @@ fetch(url, {
 <blockquote>
 <p>Example request:</p>
 </blockquote>
-<pre><code class="language-bash">curl -X GET -G "http://127.0.0.1:8000/api/v2/beatmaps/1/scores" </code></pre>
-<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/beatmaps/1/scores");
+<pre><code class="language-bash">curl -X GET -G "https://on.nanaya.pro/api/v2/beatmaps/1/scores" </code></pre>
+<pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/beatmaps/1/scores");
 
 let headers = {
     "Accept": "application/json",
@@ -1089,8 +1089,8 @@ fetch(url, {
 <blockquote>
 <p>Example request:</p>
 </blockquote>
-<pre><code class="language-bash">curl -X GET -G "http://127.0.0.1:8000/api/v2/beatmaps/lookup" </code></pre>
-<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/beatmaps/lookup");
+<pre><code class="language-bash">curl -X GET -G "https://on.nanaya.pro/api/v2/beatmaps/lookup" </code></pre>
+<pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/beatmaps/lookup");
 
 let headers = {
     "Accept": "application/json",
@@ -1117,8 +1117,8 @@ fetch(url, {
 <blockquote>
 <p>Example request:</p>
 </blockquote>
-<pre><code class="language-bash">curl -X GET -G "http://127.0.0.1:8000/api/v2/beatmaps/1" </code></pre>
-<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/beatmaps/1");
+<pre><code class="language-bash">curl -X GET -G "https://on.nanaya.pro/api/v2/beatmaps/1" </code></pre>
+<pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/beatmaps/1");
 
 let headers = {
     "Accept": "application/json",
@@ -1145,8 +1145,8 @@ fetch(url, {
 <blockquote>
 <p>Example request:</p>
 </blockquote>
-<pre><code class="language-bash">curl -X GET -G "http://127.0.0.1:8000/api/v2/beatmapsets/search/1" </code></pre>
-<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/beatmapsets/search/1");
+<pre><code class="language-bash">curl -X GET -G "https://on.nanaya.pro/api/v2/beatmapsets/search/1" </code></pre>
+<pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/beatmapsets/search/1");
 
 let headers = {
     "Accept": "application/json",
@@ -1173,8 +1173,8 @@ fetch(url, {
 <blockquote>
 <p>Example request:</p>
 </blockquote>
-<pre><code class="language-bash">curl -X GET -G "http://127.0.0.1:8000/api/v2/beatmapsets/lookup" </code></pre>
-<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/beatmapsets/lookup");
+<pre><code class="language-bash">curl -X GET -G "https://on.nanaya.pro/api/v2/beatmapsets/lookup" </code></pre>
+<pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/beatmapsets/lookup");
 
 let headers = {
     "Accept": "application/json",
@@ -1201,8 +1201,8 @@ fetch(url, {
 <blockquote>
 <p>Example request:</p>
 </blockquote>
-<pre><code class="language-bash">curl -X GET -G "http://127.0.0.1:8000/api/v2/beatmapsets/1/download" </code></pre>
-<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/beatmapsets/1/download");
+<pre><code class="language-bash">curl -X GET -G "https://on.nanaya.pro/api/v2/beatmapsets/1/download" </code></pre>
+<pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/beatmapsets/1/download");
 
 let headers = {
     "Accept": "application/json",
@@ -1229,8 +1229,8 @@ fetch(url, {
 <blockquote>
 <p>Example request:</p>
 </blockquote>
-<pre><code class="language-bash">curl -X GET -G "http://127.0.0.1:8000/api/v2/beatmapsets/1" </code></pre>
-<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/beatmapsets/1");
+<pre><code class="language-bash">curl -X GET -G "https://on.nanaya.pro/api/v2/beatmapsets/1" </code></pre>
+<pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/beatmapsets/1");
 
 let headers = {
     "Accept": "application/json",
@@ -1257,8 +1257,8 @@ fetch(url, {
 <blockquote>
 <p>Example request:</p>
 </blockquote>
-<pre><code class="language-bash">curl -X GET -G "http://127.0.0.1:8000/api/v2/friends" </code></pre>
-<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/friends");
+<pre><code class="language-bash">curl -X GET -G "https://on.nanaya.pro/api/v2/friends" </code></pre>
+<pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/friends");
 
 let headers = {
     "Accept": "application/json",
@@ -1285,8 +1285,8 @@ fetch(url, {
 <blockquote>
 <p>Example request:</p>
 </blockquote>
-<pre><code class="language-bash">curl -X GET -G "http://127.0.0.1:8000/api/v2/me" </code></pre>
-<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/me");
+<pre><code class="language-bash">curl -X GET -G "https://on.nanaya.pro/api/v2/me" </code></pre>
+<pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/me");
 
 let headers = {
     "Accept": "application/json",
@@ -1313,8 +1313,8 @@ fetch(url, {
 <blockquote>
 <p>Example request:</p>
 </blockquote>
-<pre><code class="language-bash">curl -X GET -G "http://127.0.0.1:8000/api/v2/me/download-quota-check" </code></pre>
-<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/me/download-quota-check");
+<pre><code class="language-bash">curl -X GET -G "https://on.nanaya.pro/api/v2/me/download-quota-check" </code></pre>
+<pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/me/download-quota-check");
 
 let headers = {
     "Accept": "application/json",
@@ -1341,8 +1341,8 @@ fetch(url, {
 <blockquote>
 <p>Example request:</p>
 </blockquote>
-<pre><code class="language-bash">curl -X GET -G "http://127.0.0.1:8000/api/v2/rankings/1/1" </code></pre>
-<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/rankings/1/1");
+<pre><code class="language-bash">curl -X GET -G "https://on.nanaya.pro/api/v2/rankings/1/1" </code></pre>
+<pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/rankings/1/1");
 
 let headers = {
     "Accept": "application/json",
@@ -1369,8 +1369,8 @@ fetch(url, {
 <blockquote>
 <p>Example request:</p>
 </blockquote>
-<pre><code class="language-bash">curl -X GET -G "http://127.0.0.1:8000/api/v2/users/1/kudosu" </code></pre>
-<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/users/1/kudosu");
+<pre><code class="language-bash">curl -X GET -G "https://on.nanaya.pro/api/v2/users/1/kudosu" </code></pre>
+<pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/users/1/kudosu");
 
 let headers = {
     "Accept": "application/json",
@@ -1397,8 +1397,8 @@ fetch(url, {
 <blockquote>
 <p>Example request:</p>
 </blockquote>
-<pre><code class="language-bash">curl -X GET -G "http://127.0.0.1:8000/api/v2/users/1/scores/1" </code></pre>
-<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/users/1/scores/1");
+<pre><code class="language-bash">curl -X GET -G "https://on.nanaya.pro/api/v2/users/1/scores/1" </code></pre>
+<pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/users/1/scores/1");
 
 let headers = {
     "Accept": "application/json",
@@ -1425,8 +1425,8 @@ fetch(url, {
 <blockquote>
 <p>Example request:</p>
 </blockquote>
-<pre><code class="language-bash">curl -X GET -G "http://127.0.0.1:8000/api/v2/users/1/beatmapsets/1" </code></pre>
-<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/users/1/beatmapsets/1");
+<pre><code class="language-bash">curl -X GET -G "https://on.nanaya.pro/api/v2/users/1/beatmapsets/1" </code></pre>
+<pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/users/1/beatmapsets/1");
 
 let headers = {
     "Accept": "application/json",
@@ -1453,8 +1453,8 @@ fetch(url, {
 <blockquote>
 <p>Example request:</p>
 </blockquote>
-<pre><code class="language-bash">curl -X GET -G "http://127.0.0.1:8000/api/v2/users/1/recent_activity" </code></pre>
-<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/users/1/recent_activity");
+<pre><code class="language-bash">curl -X GET -G "https://on.nanaya.pro/api/v2/users/1/recent_activity" </code></pre>
+<pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/users/1/recent_activity");
 
 let headers = {
     "Accept": "application/json",
@@ -1481,8 +1481,8 @@ fetch(url, {
 <blockquote>
 <p>Example request:</p>
 </blockquote>
-<pre><code class="language-bash">curl -X GET -G "http://127.0.0.1:8000/api/v2/users/1/1" </code></pre>
-<pre><code class="language-javascript">const url = new URL("http://127.0.0.1:8000/api/v2/users/1/1");
+<pre><code class="language-bash">curl -X GET -G "https://on.nanaya.pro/api/v2/users/1/1" </code></pre>
+<pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/users/1/1");
 
 let headers = {
     "Accept": "application/json",
