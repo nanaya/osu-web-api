@@ -37,7 +37,7 @@
               <div id="toc">
       </div>
                     <ul class="toc-footer">
-                                  <li><a href="https://github.com/ppy/osu-web">osu-web</a></li>
+                                  <li><a href="https://github.com/ppy/osu-web">osu-web on GitHub</a></li>
                                   <li><a href="https://osu.ppy.sh">osu!</a></li>
                             </ul>
             </div>
@@ -45,22 +45,62 @@
       <div class="dark-box"></div>
       <div class="content">
           <!-- START_INFO -->
-<h1>Info</h1>
-<p>Welcome to the osu!api. You can use this API to get information on various circles and those who click them.</p>
-<p>You can view code examples in the dark area to the right.</p>
-<p>The API and this documentation are a work-in-progress and likely contains errors.</p>
-<p><a href="http://on.nanaya.pro/docs/collection.json">Get Postman Collection</a></p>
+<h1>Introduction</h1>
+<p>Welcome to the documentation for osu!api v2. You can use this API to get information on various circles and those who click them.</p>
+<aside class="warning">
+WARNING: The API in under heavy development and has not stabilised yet. If you choose to use it at this stage, you do so at your own risk. Endpoints may appear, disappear, be renamed and completely change behaviour without warning.
+</aside>
+<p>Note that while we endeavour to keep this documentation up to date, consider it a work-in-progress and note that it will likely contains errors.</p>
+<p>If you notice any errors in the documentation or encounter problems using the API, please check for (or create if necessary) <a href="https://github.com/ppy/osu-web/issues">issues on GitHub</a>. Alternatively, you can ask in <code>#osu-web</code> <a href="https://discord.gg/ppy">on the development discord</a>.</p>
+<p>Code examples are provided in the dark area to the right, you can use the tabs at the top of the page to switch between bash and javascript samples.</p>
+<p>If you use <a href="https://getpostman.com">Postman</a>, you can <a href="http://on.nanaya.pro/docs/collection.json">download a collection here</a>.</p>
+<h1>Endpoint</h1>
+<h2>Base URL</h2>
+<p>The base URL is: <code>http://on.nanaya.pro/api/[version]/</code></p>
+<h2>API Versions</h2>
+<p>This is combined with the base endpoint to determine where requests should be sent.</p>
+<table>
+<thead>
+<tr>
+<th>Version</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>v2</td>
+<td>current <em>(not yet public, consider unstable and expect breaking changes)</em></td>
+</tr>
+<tr>
+<td>v1</td>
+<td><em>legacy api provided by the old site, will be deprecated soon</em></td>
+</tr>
+</tbody>
+</table>
+<h1>Authentication</h1>
+<pre><code class="language-shell"># With shell, you can just pass the correct header with each request
+curl "http://on.nanaya.pro/api/[version]/[endpoint]"
+  -H "Authorization: Bearer {{token}}"</code></pre>
+<blockquote>
+<p>Make sure to replace <code>{{token}}</code> with your OAuth2 token.</p>
+</blockquote>
+<aside class="warning">
+Public access is not yet available, thus this section is incomplete.
+</aside>
+<p>osu!api uses OAuth2 to grant access to the API. You can register for access <code>[somewhere eventually]</code>.</p>
+<p>osu!api requires a valid token to be included with all API requests in a header that looks like the following:</p>
+<p><code>Authorization: Bearer {{token}}</code></p>
+<aside class="notice">
+You must replace <code>{{token}}</code> with your OAuth2 token.
+</aside>
 <!-- END_INFO -->
 <h1>Chat</h1>
 <!-- START_959a851f02384dc7cbff5b508f31e142 -->
 <h2>Create New PM</h2>
-<blockquote>
-<p>Example request:</p>
-</blockquote>
 <pre><code class="language-bash">curl -X POST "https://on.nanaya.pro/api/v2/chat/new" \
     -H "Authorization: Bearer {{token}}" \
     -H "Content-Type: application/json" \
-    -d '{"target_id":18,"message":"enim","is_action":true}'
+    -d '{"target_id":6,"message":"provident","is_action":true}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/chat/new");
 
@@ -71,8 +111,8 @@ let headers = {
 }
 
 let body = {
-    "target_id": 18,
-    "message": "enim",
+    "target_id": 6,
+    "message": "provident",
     "is_action": true
 }
 
@@ -130,10 +170,10 @@ fetch(url, {
         }
     }
 }</code></pre>
-<p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
-This endpoint allows you to create a new PM channel.</p>
+<p><small class="authenticated">Requires authentication</small></p>
+<p>This endpoint allows you to create a new PM channel.</p>
 <h3>HTTP Request</h3>
-<p><code>POST chat/new</code></p>
+<p><code>POST /chat/new</code></p>
 <h4>Body Parameters</h4>
 <table>
 <thead>
@@ -194,18 +234,17 @@ This endpoint allows you to create a new PM channel.</p>
 <!-- END_959a851f02384dc7cbff5b508f31e142 -->
 <!-- START_e591fd891352dc3c9001dda569df00b6 -->
 <h2>Get Updates</h2>
-<blockquote>
-<p>Example request:</p>
-</blockquote>
-<pre><code class="language-bash">curl -X GET -G "https://on.nanaya.pro/api/v2/chat/updates" </code></pre>
+<pre><code class="language-bash">curl -X GET -G "https://on.nanaya.pro/api/v2/chat/updates?since=error&amp;channel_id=quam&amp;limit=2" \
+    -H "Authorization: Bearer {{token}}"
+</code></pre>
 <pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/chat/updates");
 
-    let params = {
-            "since": "minus",
-            "channel_id": "asperiores",
-            "limit": "12",
-        };
-    Object.keys(params).forEach(key =&gt; url.searchParams.append(key, params[key]));
+let params = {
+    "since": "error",
+    "channel_id": "quam",
+    "limit": "2",
+};
+Object.keys(params).forEach(key =&gt; url.searchParams.append(key, params[key]));
 
 let headers = {
     "Authorization": "Bearer {{token}}"
@@ -286,10 +325,10 @@ fetch(url, {
         }
     ]
 }</code></pre>
-<p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
-This endpoint returns new messages since the given <code>message_id</code> along with updated channel 'presence' data.</p>
+<p><small class="authenticated">Requires authentication</small></p>
+<p>This endpoint returns new messages since the given <code>message_id</code> along with updated channel 'presence' data.</p>
 <h3>HTTP Request</h3>
-<p><code>GET chat/updates</code></p>
+<p><code>GET /chat/updates</code></p>
 <h4>Query Parameters</h4>
 <table>
 <thead>
@@ -340,47 +379,18 @@ This endpoint returns new messages since the given <code>message_id</code> along
   Note that this returns messages for all channels the user has joined.
 </aside>
 <!-- END_e591fd891352dc3c9001dda569df00b6 -->
-<!-- START_e71529c9b69443e29970ab881f7d3fbf -->
-<h2>api/v2/chat/presence</h2>
-<blockquote>
-<p>Example request:</p>
-</blockquote>
-<pre><code class="language-bash">curl -X GET -G "https://on.nanaya.pro/api/v2/chat/presence" </code></pre>
-<pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/chat/presence");
-
-let headers = {
-    "Accept": "application/json",
-    "Content-Type": "application/json",
-}
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-})
-.then(response =&gt; response.json())
-.then(json =&gt; console.log(json));</code></pre>
-<blockquote>
-<p>Example response (401):</p>
-</blockquote>
-<pre><code class="language-json">{
-    "authentication": "basic"
-}</code></pre>
-<h3>HTTP Request</h3>
-<p><code>GET chat/presence</code></p>
-<!-- END_e71529c9b69443e29970ab881f7d3fbf -->
 <!-- START_b18ba41b1b4d8e4576aa768fa5c29946 -->
 <h2>Get Channel Messages</h2>
-<blockquote>
-<p>Example request:</p>
-</blockquote>
-<pre><code class="language-bash">curl -X GET -G "https://on.nanaya.pro/api/v2/chat/channels/1/messages" </code></pre>
+<pre><code class="language-bash">curl -X GET -G "https://on.nanaya.pro/api/v2/chat/channels/1/messages?channel_id=dolores&amp;limit=2" \
+    -H "Authorization: Bearer {{token}}"
+</code></pre>
 <pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/chat/channels/1/messages");
 
-    let params = {
-            "channel_id": "quis",
-            "limit": "7",
-        };
-    Object.keys(params).forEach(key =&gt; url.searchParams.append(key, params[key]));
+let params = {
+    "channel_id": "dolores",
+    "limit": "2",
+};
+Object.keys(params).forEach(key =&gt; url.searchParams.append(key, params[key]));
 
 let headers = {
     "Authorization": "Bearer {{token}}"
@@ -437,10 +447,10 @@ fetch(url, {
         }
     }
 ]</code></pre>
-<p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
-This endpoint returns the chat messages for a specific channel.</p>
+<p><small class="authenticated">Requires authentication</small></p>
+<p>This endpoint returns the chat messages for a specific channel.</p>
 <h3>HTTP Request</h3>
-<p><code>GET chat/channels/{channel}/messages</code></p>
+<p><code>GET /chat/channels/{channel}/messages</code></p>
 <h4>Query Parameters</h4>
 <table>
 <thead>
@@ -468,16 +478,15 @@ This endpoint returns the chat messages for a specific channel.</p>
 <!-- END_b18ba41b1b4d8e4576aa768fa5c29946 -->
 <!-- START_1ab08871273163d95a7dd9e26cd30302 -->
 <h2>Send Message to Channel</h2>
-<blockquote>
-<p>Example request:</p>
-</blockquote>
-<pre><code class="language-bash">curl -X POST "https://on.nanaya.pro/api/v2/chat/channels/1/messages" </code></pre>
+<pre><code class="language-bash">curl -X POST "https://on.nanaya.pro/api/v2/chat/channels/1/messages?channel_id=et" \
+    -H "Authorization: Bearer {{token}}"
+</code></pre>
 <pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/chat/channels/1/messages");
 
-    let params = {
-            "channel_id": "id",
-        };
-    Object.keys(params).forEach(key =&gt; url.searchParams.append(key, params[key]));
+let params = {
+    "channel_id": "et",
+};
+Object.keys(params).forEach(key =&gt; url.searchParams.append(key, params[key]));
 
 let headers = {
     "Authorization": "Bearer {{token}}"
@@ -513,10 +522,10 @@ fetch(url, {
         "is_supporter": true
     }
 }</code></pre>
-<p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
-This endpoint returns the chat messages for a specific channel.</p>
+<p><small class="authenticated">Requires authentication</small></p>
+<p>This endpoint returns the chat messages for a specific channel.</p>
 <h3>HTTP Request</h3>
-<p><code>POST chat/channels/{channel}/messages</code></p>
+<p><code>POST /chat/channels/{channel}/messages</code></p>
 <h4>Query Parameters</h4>
 <table>
 <thead>
@@ -542,10 +551,9 @@ This endpoint returns the chat messages for a specific channel.</p>
 <!-- END_1ab08871273163d95a7dd9e26cd30302 -->
 <!-- START_51e2add0d6e60e1b9fab84abab86056c -->
 <h2>Join Channel</h2>
-<blockquote>
-<p>Example request:</p>
-</blockquote>
-<pre><code class="language-bash">curl -X PUT "https://on.nanaya.pro/api/v2/chat/channels/1/users/1" </code></pre>
+<pre><code class="language-bash">curl -X PUT "https://on.nanaya.pro/api/v2/chat/channels/1/users/1" \
+    -H "Authorization: Bearer {{token}}"
+</code></pre>
 <pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/chat/channels/1/users/1");
 
 let headers = {
@@ -569,10 +577,10 @@ fetch(url, {
     "description": "The official osu! channel (english only).",
     "type": "public"
 }</code></pre>
-<p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
-This endpoint allows you to join a public channel.</p>
+<p><small class="authenticated">Requires authentication</small></p>
+<p>This endpoint allows you to join a public channel.</p>
 <h3>HTTP Request</h3>
-<p><code>PUT chat/channels/{channel}/users/{user}</code></p>
+<p><code>PUT /chat/channels/{channel}/users/{user}</code></p>
 <h3>Response Format</h3>
 <p>Returns the joined <a href="#chatchannel">ChatChannel</a>.</p>
 <aside class="notice">
@@ -581,10 +589,9 @@ This endpoint allows you to join a public channel.</p>
 <!-- END_51e2add0d6e60e1b9fab84abab86056c -->
 <!-- START_ed6f2d2e964f63c05c2ecc359b290446 -->
 <h2>Leave Channel</h2>
-<blockquote>
-<p>Example request:</p>
-</blockquote>
-<pre><code class="language-bash">curl -X DELETE "https://on.nanaya.pro/api/v2/chat/channels/1/users/1" </code></pre>
+<pre><code class="language-bash">curl -X DELETE "https://on.nanaya.pro/api/v2/chat/channels/1/users/1" \
+    -H "Authorization: Bearer {{token}}"
+</code></pre>
 <pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/chat/channels/1/users/1");
 
 let headers = {
@@ -603,10 +610,10 @@ fetch(url, {
 <p>Example response (204):</p>
 </blockquote>
 <pre><code class="language-json">[]</code></pre>
-<p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
-This endpoint allows you to leave a public channel.</p>
+<p><small class="authenticated">Requires authentication</small></p>
+<p>This endpoint allows you to leave a public channel.</p>
 <h3>HTTP Request</h3>
-<p><code>DELETE chat/channels/{channel}/users/{user}</code></p>
+<p><code>DELETE /chat/channels/{channel}/users/{user}</code></p>
 <h3>Response Format</h3>
 <p><em>empty response</em></p>
 <aside class="notice">
@@ -615,31 +622,26 @@ This endpoint allows you to leave a public channel.</p>
 <!-- END_ed6f2d2e964f63c05c2ecc359b290446 -->
 <!-- START_31d2e2dffe4a4a11b61a82fd8ca59de7 -->
 <h2>Mark Channel as Read</h2>
-<blockquote>
-<p>Example request:</p>
-</blockquote>
-<pre><code class="language-bash">curl -X PUT "https://on.nanaya.pro/api/v2/chat/channels/1/mark-as-read/1" \
-    -H "Authorization: Bearer {{token}}" \
-    -H "Content-Type: application/json" \
-    -d '{"channel_id":"est","message_id":"earum"}'
+<pre><code class="language-bash">curl -X PUT "https://on.nanaya.pro/api/v2/chat/channels/1/mark-as-read/1?channel_id=et&amp;message_id=maxime" \
+    -H "Authorization: Bearer {{token}}"
 </code></pre>
 <pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/chat/channels/1/mark-as-read/1");
 
+let params = {
+    "channel_id": "et",
+    "message_id": "maxime",
+};
+Object.keys(params).forEach(key =&gt; url.searchParams.append(key, params[key]));
+
 let headers = {
     "Authorization": "Bearer {{token}}"
-    "Content-Type": "application/json",
     "Accept": "application/json",
-}
-
-let body = {
-    "channel_id": "est",
-    "message_id": "earum"
+    "Content-Type": "application/json",
 }
 
 fetch(url, {
     method: "PUT",
     headers: headers,
-    body: body
 })
 .then(response =&gt; response.json())
 .then(json =&gt; console.log(json));</code></pre>
@@ -647,16 +649,15 @@ fetch(url, {
 <p>Example response (204):</p>
 </blockquote>
 <pre><code class="language-json">[]</code></pre>
-<p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
-This endpoint marks the channel as having being read up to the given <code>message_id</code>.</p>
+<p><small class="authenticated">Requires authentication</small></p>
+<p>This endpoint marks the channel as having being read up to the given <code>message_id</code>.</p>
 <h3>HTTP Request</h3>
-<p><code>PUT chat/channels/{channel}/mark-as-read/{message}</code></p>
-<h4>Body Parameters</h4>
+<p><code>PUT /chat/channels/{channel}/mark-as-read/{message}</code></p>
+<h4>Query Parameters</h4>
 <table>
 <thead>
 <tr>
 <th>Parameter</th>
-<th>Type</th>
 <th>Status</th>
 <th>Description</th>
 </tr>
@@ -665,13 +666,11 @@ This endpoint marks the channel as having being read up to the given <code>messa
 <tr>
 <td>channel_id</td>
 <td>required</td>
-<td>optional</td>
 <td>The <code>channel_id</code> of the channel to mark as read</td>
 </tr>
 <tr>
 <td>message_id</td>
 <td>required</td>
-<td>optional</td>
 <td>The <code>message_id</code> of the message to mark as read up to</td>
 </tr>
 </tbody>
@@ -684,10 +683,9 @@ This endpoint marks the channel as having being read up to the given <code>messa
 <!-- END_31d2e2dffe4a4a11b61a82fd8ca59de7 -->
 <!-- START_1388f779104e1391cfdbcc780923e5ab -->
 <h2>Get Channel List</h2>
-<blockquote>
-<p>Example request:</p>
-</blockquote>
-<pre><code class="language-bash">curl -X GET -G "https://on.nanaya.pro/api/v2/chat/channels" </code></pre>
+<pre><code class="language-bash">curl -X GET -G "https://on.nanaya.pro/api/v2/chat/channels" \
+    -H "Authorization: Bearer {{token}}"
+</code></pre>
 <pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/chat/channels");
 
 let headers = {
@@ -713,19 +711,197 @@ fetch(url, {
         "type": "public"
     }
 ]</code></pre>
-<p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
-This endpoint returns a list of all joinable public channels.</p>
+<p><small class="authenticated">Requires authentication</small></p>
+<p>This endpoint returns a list of all joinable public channels.</p>
 <h3>HTTP Request</h3>
-<p><code>GET chat/channels</code></p>
+<p><code>GET /chat/channels</code></p>
 <h3>Response Format</h3>
 <p>Returns an array of <a href="#chatchannel">ChatChannel</a></p>
 <!-- END_1388f779104e1391cfdbcc780923e5ab -->
+<h1>Notification</h1>
+<!-- START_39f6b02b802bdea1c6a380b95764abe8 -->
+<h2>Get Notifications</h2>
+<pre><code class="language-bash">curl -X GET -G "https://on.nanaya.pro/api/v2/notifications?max_id=ipsa" \
+    -H "Authorization: Bearer {{token}}"
+</code></pre>
+<pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/notifications");
+
+let params = {
+    "max_id": "ipsa",
+};
+Object.keys(params).forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+let headers = {
+    "Authorization": "Bearer {{token}}"
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+}
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+.then(response =&gt; response.json())
+.then(json =&gt; console.log(json));</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "has_more": true,
+    "notifications": [
+        {
+            "id": 1,
+            "name": "forum_topic_reply",
+            "created_at": "2019-04-24T07:12:43+00:00",
+            "object_type": "forum_topic",
+            "object_id": 1,
+            "source_user_id": 1,
+            "is_read": false,
+            "details": {
+                "title": "A topic",
+                "post_id": 2,
+                "username": "User",
+                "cover_url": "https:\/\/..."
+            }
+        }
+    ],
+    "unread_count": 100,
+    "notification_endpoint": "wss:\/\/notify.ppy.sh"
+}</code></pre>
+<p><small class="authenticated">Requires authentication</small></p>
+<p>This endpoint returns a list of the user's unread notifications. Sorted descending by <code>id</code> with limit of 50.</p>
+<h3>HTTP Request</h3>
+<p><code>GET /notifications</code></p>
+<h4>Query Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>max_id</td>
+<td>optional</td>
+<td>Maximum <code>id</code> fetched. Can be used to load earlier notifications. Defaults to no limit (fetch latest notifications)</td>
+</tr>
+</tbody>
+</table>
+<h3>Response Format</h3>
+<p>Returns an object containing <a href="#notification">Notification</a> and other related attributes.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>has_more</td>
+<td>boolean whether or not there are more notifications</td>
+</tr>
+<tr>
+<td>notifications</td>
+<td>array of <a href="#notification">Notification</a></td>
+</tr>
+<tr>
+<td>unread_count</td>
+<td>total unread notifications</td>
+</tr>
+<tr>
+<td>notification_endpoint</td>
+<td>url to connect to websocket server</td>
+</tr>
+</tbody>
+</table>
+<!-- END_39f6b02b802bdea1c6a380b95764abe8 -->
+<!-- START_d074bff270d0fc7ca69ba8e2f57f87ec -->
+<h2>Mark Notifications as Read</h2>
+<pre><code class="language-bash">curl -X POST "https://on.nanaya.pro/api/v2/notifications/mark-read" \
+    -H "Authorization: Bearer {{token}}" \
+    -H "Content-Type: application/json" \
+    -d '{"ids":"[1, 2, 3]"}'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/notifications/mark-read");
+
+let headers = {
+    "Authorization": "Bearer {{token}}"
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+}
+
+let body = {
+    "ids": "[1, 2, 3]"
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+.then(response =&gt; response.json())
+.then(json =&gt; console.log(json));</code></pre>
+<blockquote>
+<p>Example response (204):</p>
+</blockquote>
+<pre><code class="language-json">[]</code></pre>
+<p><small class="authenticated">Requires authentication</small></p>
+<p>This endpoint allows you to mark notifications read.</p>
+<h3>HTTP Request</h3>
+<p><code>POST /notifications/mark-read</code></p>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ids</td>
+<td>integer[]</td>
+<td>required</td>
+<td><code>id</code> of notifications to be marked as read</td>
+</tr>
+</tbody>
+</table>
+<h3>Response Format</h3>
+<p><em>empty response</em></p>
+<!-- END_d074bff270d0fc7ca69ba8e2f57f87ec -->
 <h1>Undocumented</h1>
+<!-- START_e71529c9b69443e29970ab881f7d3fbf -->
+<h2>api/v2/chat/presence</h2>
+<pre><code class="language-bash">curl -X GET -G "https://on.nanaya.pro/api/v2/chat/presence" </code></pre>
+<pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/chat/presence");
+
+let headers = {
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+}
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+.then(response =&gt; response.json())
+.then(json =&gt; console.log(json));</code></pre>
+<blockquote>
+<p>Example response (401):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "authentication": "basic"
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET /chat/presence</code></p>
+<!-- END_e71529c9b69443e29970ab881f7d3fbf -->
 <!-- START_29ffb4659eefd0aea6258c0fefa5eb4c -->
 <h2>api/v2/changelog/{stream}/{build}</h2>
-<blockquote>
-<p>Example request:</p>
-</blockquote>
 <pre><code class="language-bash">curl -X GET -G "https://on.nanaya.pro/api/v2/changelog/1/1" </code></pre>
 <pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/changelog/1/1");
 
@@ -747,13 +923,10 @@ fetch(url, {
     "authentication": "basic"
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>GET changelog/{stream}/{build}</code></p>
+<p><code>GET /changelog/{stream}/{build}</code></p>
 <!-- END_29ffb4659eefd0aea6258c0fefa5eb4c -->
 <!-- START_68465f5b7078abd2010d6d52d26437ab -->
 <h2>api/v2/changelog</h2>
-<blockquote>
-<p>Example request:</p>
-</blockquote>
 <pre><code class="language-bash">curl -X GET -G "https://on.nanaya.pro/api/v2/changelog" </code></pre>
 <pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/changelog");
 
@@ -775,13 +948,10 @@ fetch(url, {
     "authentication": "basic"
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>GET changelog</code></p>
+<p><code>GET /changelog</code></p>
 <!-- END_68465f5b7078abd2010d6d52d26437ab -->
 <!-- START_19bb540bae06440a8e37b76fdabb8890 -->
 <h2>api/v2/changelog/{changelog}</h2>
-<blockquote>
-<p>Example request:</p>
-</blockquote>
 <pre><code class="language-bash">curl -X GET -G "https://on.nanaya.pro/api/v2/changelog/1" </code></pre>
 <pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/changelog/1");
 
@@ -803,13 +973,10 @@ fetch(url, {
     "authentication": "basic"
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>GET changelog/{changelog}</code></p>
+<p><code>GET /changelog/{changelog}</code></p>
 <!-- END_19bb540bae06440a8e37b76fdabb8890 -->
 <!-- START_9ef96cae4492f19bc8cbfe89af658f1c -->
 <h2>api/v2/rooms/{mode?}</h2>
-<blockquote>
-<p>Example request:</p>
-</blockquote>
 <pre><code class="language-bash">curl -X GET -G "https://on.nanaya.pro/api/v2/rooms/1" </code></pre>
 <pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/rooms/1");
 
@@ -831,13 +998,10 @@ fetch(url, {
     "authentication": "basic"
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>GET rooms/{mode?}</code></p>
+<p><code>GET /rooms/{mode?}</code></p>
 <!-- END_9ef96cae4492f19bc8cbfe89af658f1c -->
 <!-- START_f822a354eea2aadfeb35d127ab341653 -->
 <h2>api/v2/rooms/{room}/users/{user}</h2>
-<blockquote>
-<p>Example request:</p>
-</blockquote>
 <pre><code class="language-bash">curl -X PUT "https://on.nanaya.pro/api/v2/rooms/1/users/1" </code></pre>
 <pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/rooms/1/users/1");
 
@@ -853,13 +1017,10 @@ fetch(url, {
 .then(response =&gt; response.json())
 .then(json =&gt; console.log(json));</code></pre>
 <h3>HTTP Request</h3>
-<p><code>PUT rooms/{room}/users/{user}</code></p>
+<p><code>PUT /rooms/{room}/users/{user}</code></p>
 <!-- END_f822a354eea2aadfeb35d127ab341653 -->
 <!-- START_1f58289ecb0c3c9af110a8c3264044be -->
 <h2>api/v2/rooms/{room}/users/{user}</h2>
-<blockquote>
-<p>Example request:</p>
-</blockquote>
 <pre><code class="language-bash">curl -X DELETE "https://on.nanaya.pro/api/v2/rooms/1/users/1" </code></pre>
 <pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/rooms/1/users/1");
 
@@ -875,13 +1036,10 @@ fetch(url, {
 .then(response =&gt; response.json())
 .then(json =&gt; console.log(json));</code></pre>
 <h3>HTTP Request</h3>
-<p><code>DELETE rooms/{room}/users/{user}</code></p>
+<p><code>DELETE /rooms/{room}/users/{user}</code></p>
 <!-- END_1f58289ecb0c3c9af110a8c3264044be -->
 <!-- START_87f01532dd407f9f7f469f1f3f8ae7be -->
 <h2>api/v2/rooms/{room}/leaderboard</h2>
-<blockquote>
-<p>Example request:</p>
-</blockquote>
 <pre><code class="language-bash">curl -X GET -G "https://on.nanaya.pro/api/v2/rooms/1/leaderboard" </code></pre>
 <pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/rooms/1/leaderboard");
 
@@ -903,13 +1061,10 @@ fetch(url, {
     "authentication": "basic"
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>GET rooms/{room}/leaderboard</code></p>
+<p><code>GET /rooms/{room}/leaderboard</code></p>
 <!-- END_87f01532dd407f9f7f469f1f3f8ae7be -->
 <!-- START_43b270f8bc98171c7aa6162a6a8c0453 -->
 <h2>api/v2/rooms/{room}/playlist/{playlist}/scores</h2>
-<blockquote>
-<p>Example request:</p>
-</blockquote>
 <pre><code class="language-bash">curl -X POST "https://on.nanaya.pro/api/v2/rooms/1/playlist/1/scores" </code></pre>
 <pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/rooms/1/playlist/1/scores");
 
@@ -925,13 +1080,10 @@ fetch(url, {
 .then(response =&gt; response.json())
 .then(json =&gt; console.log(json));</code></pre>
 <h3>HTTP Request</h3>
-<p><code>POST rooms/{room}/playlist/{playlist}/scores</code></p>
+<p><code>POST /rooms/{room}/playlist/{playlist}/scores</code></p>
 <!-- END_43b270f8bc98171c7aa6162a6a8c0453 -->
 <!-- START_a5400002cb11007dab4954c1838a8b9e -->
 <h2>api/v2/rooms/{room}/playlist/{playlist}/scores/{score}</h2>
-<blockquote>
-<p>Example request:</p>
-</blockquote>
 <pre><code class="language-bash">curl -X PUT "https://on.nanaya.pro/api/v2/rooms/1/playlist/1/scores/1" </code></pre>
 <pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/rooms/1/playlist/1/scores/1");
 
@@ -947,14 +1099,11 @@ fetch(url, {
 .then(response =&gt; response.json())
 .then(json =&gt; console.log(json));</code></pre>
 <h3>HTTP Request</h3>
-<p><code>PUT rooms/{room}/playlist/{playlist}/scores/{score}</code></p>
-<p><code>PATCH rooms/{room}/playlist/{playlist}/scores/{score}</code></p>
+<p><code>PUT /rooms/{room}/playlist/{playlist}/scores/{score}</code></p>
+<p><code>PATCH /rooms/{room}/playlist/{playlist}/scores/{score}</code></p>
 <!-- END_a5400002cb11007dab4954c1838a8b9e -->
 <!-- START_0d3a14ddefeba5570e5a40971c58c987 -->
 <h2>api/v2/rooms</h2>
-<blockquote>
-<p>Example request:</p>
-</blockquote>
 <pre><code class="language-bash">curl -X POST "https://on.nanaya.pro/api/v2/rooms" </code></pre>
 <pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/rooms");
 
@@ -970,13 +1119,10 @@ fetch(url, {
 .then(response =&gt; response.json())
 .then(json =&gt; console.log(json));</code></pre>
 <h3>HTTP Request</h3>
-<p><code>POST rooms</code></p>
+<p><code>POST /rooms</code></p>
 <!-- END_0d3a14ddefeba5570e5a40971c58c987 -->
 <!-- START_5c88d104fd68b3e911a23f79b0613cbf -->
 <h2>api/v2/rooms/{room}</h2>
-<blockquote>
-<p>Example request:</p>
-</blockquote>
 <pre><code class="language-bash">curl -X GET -G "https://on.nanaya.pro/api/v2/rooms/1" </code></pre>
 <pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/rooms/1");
 
@@ -998,13 +1144,10 @@ fetch(url, {
     "authentication": "basic"
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>GET rooms/{room}</code></p>
+<p><code>GET /rooms/{room}</code></p>
 <!-- END_5c88d104fd68b3e911a23f79b0613cbf -->
 <!-- START_e8db0d45da6534944d6e92a39f4c7a05 -->
 <h2>api/v2/beatmapsets/favourites</h2>
-<blockquote>
-<p>Example request:</p>
-</blockquote>
 <pre><code class="language-bash">curl -X GET -G "https://on.nanaya.pro/api/v2/beatmapsets/favourites" </code></pre>
 <pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/beatmapsets/favourites");
 
@@ -1026,13 +1169,10 @@ fetch(url, {
     "authentication": "basic"
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>GET beatmapsets/favourites</code></p>
+<p><code>GET /beatmapsets/favourites</code></p>
 <!-- END_e8db0d45da6534944d6e92a39f4c7a05 -->
 <!-- START_0cc12a89f0442c7cf0d1d0a5463c89c9 -->
 <h2>api/v2/scores/{mode}/{score}/download</h2>
-<blockquote>
-<p>Example request:</p>
-</blockquote>
 <pre><code class="language-bash">curl -X GET -G "https://on.nanaya.pro/api/v2/scores/1/1/download" </code></pre>
 <pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/scores/1/1/download");
 
@@ -1054,13 +1194,10 @@ fetch(url, {
     "authentication": "basic"
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>GET scores/{mode}/{score}/download</code></p>
+<p><code>GET /scores/{mode}/{score}/download</code></p>
 <!-- END_0cc12a89f0442c7cf0d1d0a5463c89c9 -->
 <!-- START_49aabe3d06abdba9ae490907a103cb82 -->
 <h2>api/v2/beatmaps/{id}/scores</h2>
-<blockquote>
-<p>Example request:</p>
-</blockquote>
 <pre><code class="language-bash">curl -X GET -G "https://on.nanaya.pro/api/v2/beatmaps/1/scores" </code></pre>
 <pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/beatmaps/1/scores");
 
@@ -1082,13 +1219,10 @@ fetch(url, {
     "authentication": "basic"
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>GET beatmaps/{id}/scores</code></p>
+<p><code>GET /beatmaps/{id}/scores</code></p>
 <!-- END_49aabe3d06abdba9ae490907a103cb82 -->
 <!-- START_51fbfc3d213ebfd55d9f2c481eea4212 -->
 <h2>api/v2/beatmaps/lookup</h2>
-<blockquote>
-<p>Example request:</p>
-</blockquote>
 <pre><code class="language-bash">curl -X GET -G "https://on.nanaya.pro/api/v2/beatmaps/lookup" </code></pre>
 <pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/beatmaps/lookup");
 
@@ -1110,13 +1244,10 @@ fetch(url, {
     "authentication": "basic"
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>GET beatmaps/lookup</code></p>
+<p><code>GET /beatmaps/lookup</code></p>
 <!-- END_51fbfc3d213ebfd55d9f2c481eea4212 -->
 <!-- START_d1734d89a6a7c2f7000cdb1b9742b3cf -->
 <h2>api/v2/beatmaps/{beatmap}</h2>
-<blockquote>
-<p>Example request:</p>
-</blockquote>
 <pre><code class="language-bash">curl -X GET -G "https://on.nanaya.pro/api/v2/beatmaps/1" </code></pre>
 <pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/beatmaps/1");
 
@@ -1138,13 +1269,10 @@ fetch(url, {
     "authentication": "basic"
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>GET beatmaps/{beatmap}</code></p>
+<p><code>GET /beatmaps/{beatmap}</code></p>
 <!-- END_d1734d89a6a7c2f7000cdb1b9742b3cf -->
 <!-- START_7285c1e19ab99fff4856638bd337f519 -->
 <h2>api/v2/beatmapsets/search/{filters?}</h2>
-<blockquote>
-<p>Example request:</p>
-</blockquote>
 <pre><code class="language-bash">curl -X GET -G "https://on.nanaya.pro/api/v2/beatmapsets/search/1" </code></pre>
 <pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/beatmapsets/search/1");
 
@@ -1166,13 +1294,10 @@ fetch(url, {
     "authentication": "basic"
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>GET beatmapsets/search/{filters?}</code></p>
+<p><code>GET /beatmapsets/search/{filters?}</code></p>
 <!-- END_7285c1e19ab99fff4856638bd337f519 -->
 <!-- START_66e1303eea94344ea9eb28704ec8edaf -->
 <h2>api/v2/beatmapsets/lookup</h2>
-<blockquote>
-<p>Example request:</p>
-</blockquote>
 <pre><code class="language-bash">curl -X GET -G "https://on.nanaya.pro/api/v2/beatmapsets/lookup" </code></pre>
 <pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/beatmapsets/lookup");
 
@@ -1194,13 +1319,10 @@ fetch(url, {
     "authentication": "basic"
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>GET beatmapsets/lookup</code></p>
+<p><code>GET /beatmapsets/lookup</code></p>
 <!-- END_66e1303eea94344ea9eb28704ec8edaf -->
 <!-- START_ca8448f67e76dd258ec54a90efbb6ef5 -->
 <h2>api/v2/beatmapsets/{beatmapset}/download</h2>
-<blockquote>
-<p>Example request:</p>
-</blockquote>
 <pre><code class="language-bash">curl -X GET -G "https://on.nanaya.pro/api/v2/beatmapsets/1/download" </code></pre>
 <pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/beatmapsets/1/download");
 
@@ -1222,13 +1344,10 @@ fetch(url, {
     "authentication": "basic"
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>GET beatmapsets/{beatmapset}/download</code></p>
+<p><code>GET /beatmapsets/{beatmapset}/download</code></p>
 <!-- END_ca8448f67e76dd258ec54a90efbb6ef5 -->
 <!-- START_4d92bd71af59f616aab99b75e283d444 -->
 <h2>api/v2/beatmapsets/{beatmapset}</h2>
-<blockquote>
-<p>Example request:</p>
-</blockquote>
 <pre><code class="language-bash">curl -X GET -G "https://on.nanaya.pro/api/v2/beatmapsets/1" </code></pre>
 <pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/beatmapsets/1");
 
@@ -1250,13 +1369,10 @@ fetch(url, {
     "authentication": "basic"
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>GET beatmapsets/{beatmapset}</code></p>
+<p><code>GET /beatmapsets/{beatmapset}</code></p>
 <!-- END_4d92bd71af59f616aab99b75e283d444 -->
 <!-- START_ba3ff32873fad0790c9cffb72d39a1e5 -->
 <h2>api/v2/friends</h2>
-<blockquote>
-<p>Example request:</p>
-</blockquote>
 <pre><code class="language-bash">curl -X GET -G "https://on.nanaya.pro/api/v2/friends" </code></pre>
 <pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/friends");
 
@@ -1278,13 +1394,10 @@ fetch(url, {
     "authentication": "basic"
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>GET friends</code></p>
+<p><code>GET /friends</code></p>
 <!-- END_ba3ff32873fad0790c9cffb72d39a1e5 -->
 <!-- START_578fcaadeb13d254977bdf2ac37676d8 -->
 <h2>api/v2/me</h2>
-<blockquote>
-<p>Example request:</p>
-</blockquote>
 <pre><code class="language-bash">curl -X GET -G "https://on.nanaya.pro/api/v2/me" </code></pre>
 <pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/me");
 
@@ -1306,13 +1419,10 @@ fetch(url, {
     "authentication": "basic"
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>GET me</code></p>
+<p><code>GET /me</code></p>
 <!-- END_578fcaadeb13d254977bdf2ac37676d8 -->
 <!-- START_4dfcb6237ce2f30cf82ed7d8bd973b78 -->
 <h2>api/v2/me/download-quota-check</h2>
-<blockquote>
-<p>Example request:</p>
-</blockquote>
 <pre><code class="language-bash">curl -X GET -G "https://on.nanaya.pro/api/v2/me/download-quota-check" </code></pre>
 <pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/me/download-quota-check");
 
@@ -1334,13 +1444,10 @@ fetch(url, {
     "authentication": "basic"
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>GET me/download-quota-check</code></p>
+<p><code>GET /me/download-quota-check</code></p>
 <!-- END_4dfcb6237ce2f30cf82ed7d8bd973b78 -->
 <!-- START_741282cdda7dd0d737c5c7b46e2af0f7 -->
 <h2>api/v2/rankings/{mode}/{type}</h2>
-<blockquote>
-<p>Example request:</p>
-</blockquote>
 <pre><code class="language-bash">curl -X GET -G "https://on.nanaya.pro/api/v2/rankings/1/1" </code></pre>
 <pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/rankings/1/1");
 
@@ -1362,13 +1469,10 @@ fetch(url, {
     "authentication": "basic"
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>GET rankings/{mode}/{type}</code></p>
+<p><code>GET /rankings/{mode}/{type}</code></p>
 <!-- END_741282cdda7dd0d737c5c7b46e2af0f7 -->
 <!-- START_d733b95f42b2394ca8bdd7193c4655a6 -->
 <h2>api/v2/users/{user}/kudosu</h2>
-<blockquote>
-<p>Example request:</p>
-</blockquote>
 <pre><code class="language-bash">curl -X GET -G "https://on.nanaya.pro/api/v2/users/1/kudosu" </code></pre>
 <pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/users/1/kudosu");
 
@@ -1390,13 +1494,10 @@ fetch(url, {
     "authentication": "basic"
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>GET users/{user}/kudosu</code></p>
+<p><code>GET /users/{user}/kudosu</code></p>
 <!-- END_d733b95f42b2394ca8bdd7193c4655a6 -->
 <!-- START_b3ea131700a24f833394c819b0147eaf -->
 <h2>api/v2/users/{user}/scores/{type}</h2>
-<blockquote>
-<p>Example request:</p>
-</blockquote>
 <pre><code class="language-bash">curl -X GET -G "https://on.nanaya.pro/api/v2/users/1/scores/1" </code></pre>
 <pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/users/1/scores/1");
 
@@ -1418,13 +1519,10 @@ fetch(url, {
     "authentication": "basic"
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>GET users/{user}/scores/{type}</code></p>
+<p><code>GET /users/{user}/scores/{type}</code></p>
 <!-- END_b3ea131700a24f833394c819b0147eaf -->
 <!-- START_c658095d761a0ea130ca450990649c1a -->
 <h2>api/v2/users/{user}/beatmapsets/{type}</h2>
-<blockquote>
-<p>Example request:</p>
-</blockquote>
 <pre><code class="language-bash">curl -X GET -G "https://on.nanaya.pro/api/v2/users/1/beatmapsets/1" </code></pre>
 <pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/users/1/beatmapsets/1");
 
@@ -1446,13 +1544,10 @@ fetch(url, {
     "authentication": "basic"
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>GET users/{user}/beatmapsets/{type}</code></p>
+<p><code>GET /users/{user}/beatmapsets/{type}</code></p>
 <!-- END_c658095d761a0ea130ca450990649c1a -->
 <!-- START_1f111f3c58f8f97d865dafdb625e6470 -->
 <h2>api/v2/users/{user}/recent_activity</h2>
-<blockquote>
-<p>Example request:</p>
-</blockquote>
 <pre><code class="language-bash">curl -X GET -G "https://on.nanaya.pro/api/v2/users/1/recent_activity" </code></pre>
 <pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/users/1/recent_activity");
 
@@ -1474,13 +1569,10 @@ fetch(url, {
     "authentication": "basic"
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>GET users/{user}/recent_activity</code></p>
+<p><code>GET /users/{user}/recent_activity</code></p>
 <!-- END_1f111f3c58f8f97d865dafdb625e6470 -->
 <!-- START_5d096de03e7123255179adb55b1554b4 -->
 <h2>api/v2/users/{user}/{mode?}</h2>
-<blockquote>
-<p>Example request:</p>
-</blockquote>
 <pre><code class="language-bash">curl -X GET -G "https://on.nanaya.pro/api/v2/users/1/1" </code></pre>
 <pre><code class="language-javascript">const url = new URL("https://on.nanaya.pro/api/v2/users/1/1");
 
@@ -1502,10 +1594,10 @@ fetch(url, {
     "authentication": "basic"
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>GET users/{user}/{mode?}</code></p>
+<p><code>GET /users/{user}/{mode?}</code></p>
 <!-- END_5d096de03e7123255179adb55b1554b4 --><h1>Notification Websocket</h1>
 <h2>Connection</h2>
-<pre><code class="language-shell">wscat -c "{notification_endpoint}"
+<pre><code class="language-bash">wscat -c "{notification_endpoint}"
   -H "Authorization: Bearer {{token}}"</code></pre>
 <blockquote>
 <p>The above command will wait and display new notifications as they arrive</p>
@@ -1624,14 +1716,17 @@ fetch(url, {
 <tr>
 <td>channel_id</td>
 <td>number</td>
+<td></td>
 </tr>
 <tr>
 <td>name</td>
 <td>string</td>
+<td></td>
 </tr>
 <tr>
 <td>description</td>
 <td>string?</td>
+<td></td>
 </tr>
 <tr>
 <td>icon*</td>
@@ -1671,6 +1766,7 @@ fetch(url, {
 <tbody>
 <tr>
 <td>PUBLIC</td>
+<td></td>
 </tr>
 <tr>
 <td>PRIVATE</td>
@@ -1682,6 +1778,7 @@ fetch(url, {
 </tr>
 <tr>
 <td>SPECTATOR</td>
+<td></td>
 </tr>
 <tr>
 <td>TEMPORARY</td>
@@ -1799,6 +1896,7 @@ Public channels, group chats and private DMs are all considered "channels".
 <tr>
 <td>id</td>
 <td>number</td>
+<td></td>
 </tr>
 <tr>
 <td>name</td>
@@ -1813,18 +1911,22 @@ Public channels, group chats and private DMs are all considered "channels".
 <tr>
 <td>object_type</td>
 <td>string</td>
+<td></td>
 </tr>
 <tr>
 <td>object_id</td>
 <td>number</td>
+<td></td>
 </tr>
 <tr>
 <td>source_user_id</td>
 <td>number?</td>
+<td></td>
 </tr>
 <tr>
 <td>is_read</td>
 <td>boolean</td>
+<td></td>
 </tr>
 <tr>
 <td>details</td>
@@ -1843,48 +1945,49 @@ Public channels, group chats and private DMs are all considered "channels".
 </thead>
 <tbody>
 <tr>
-<td>beatmapset_discussion_lock</td>
+<td><a href="#notification-beatmapset_discussion_lock">beatmapset_discussion_lock</a></td>
 <td>Discussion on beatmap has been locked</td>
 </tr>
 <tr>
-<td>beatmapset_discussion_post_new</td>
+<td><a href="#notification-beatmapset_discussion_post_new">beatmapset_discussion_post_new</a></td>
 <td>New discussion post on beatmap</td>
 </tr>
 <tr>
-<td>beatmapset_discussion_unlock</td>
+<td><a href="#notification-beatmapset_discussion_unlock">beatmapset_discussion_unlock</a></td>
 <td>Discussion on beatmap has been unlocked</td>
 </tr>
 <tr>
-<td>beatmapset_disqualify</td>
+<td><a href="#notification-beatmapset_disqualify">beatmapset_disqualify</a></td>
 <td>Beatmap was disqualified</td>
 </tr>
 <tr>
-<td>beatmapset_love</td>
+<td><a href="#notification-beatmapset_love">beatmapset_love</a></td>
 <td>Beatmap was promoted to loved</td>
 </tr>
 <tr>
-<td>beatmapset_nominate</td>
+<td><a href="#notification-beatmapset_nominate">beatmapset_nominate</a></td>
 <td>Beatmap was nominated</td>
 </tr>
 <tr>
-<td>beatmapset_qualify</td>
+<td><a href="#notification-beatmapset_qualify">beatmapset_qualify</a></td>
 <td>Beatmap has gained enough nominations and entered the ranking queue</td>
 </tr>
 <tr>
-<td>beatmapset_reset_nominations</td>
+<td><a href="#notification-beatmapset_reset_nominations">beatmapset_reset_nominations</a></td>
 <td>Nomination of beatmap was reset</td>
 </tr>
 <tr>
-<td>channel_message</td>
+<td><a href="#notification-channel_message">channel_message</a></td>
 <td>Someone sent chat message</td>
 </tr>
 <tr>
-<td>forum_topic_reply</td>
+<td><a href="#notification-forum_topic_reply">forum_topic_reply</a></td>
 <td>Someone replied on forum topic</td>
 </tr>
 </tbody>
 </table>
-<h3><code>beatmapset_discussion_lock</code></h3>
+<div id="notification-beatmapset_discussion_lock" data-unique="notification-beatmapset_discussion_lock"></div>
+<h4><code>beatmapset_discussion_lock</code></h4>
 <table>
 <thead>
 <tr>
@@ -1938,7 +2041,8 @@ Public channels, group chats and private DMs are all considered "channels".
 </tr>
 </tbody>
 </table>
-<h3><code>beatmapset_discussion_post_new</code></h3>
+<div id="notification-beatmapset_discussion_post_new" data-unique="notification-beatmapset_discussion_post_new"></div>
+<h4><code>beatmapset_discussion_post_new</code></h4>
 <table>
 <thead>
 <tr>
@@ -1988,10 +2092,12 @@ Public channels, group chats and private DMs are all considered "channels".
 <tr>
 <td>discussion_id</td>
 <td>number</td>
+<td></td>
 </tr>
 <tr>
 <td>post_id</td>
 <td>number</td>
+<td></td>
 </tr>
 <tr>
 <td>beatmap_id</td>
@@ -2005,7 +2111,8 @@ Public channels, group chats and private DMs are all considered "channels".
 </tr>
 </tbody>
 </table>
-<h3><code>beatmapset_discussion_unlock</code></h3>
+<div id="notification-beatmapset_discussion_unlock" data-unique="notification-beatmapset_discussion_unlock"></div>
+<h4><code>beatmapset_discussion_unlock</code></h4>
 <table>
 <thead>
 <tr>
@@ -2059,7 +2166,8 @@ Public channels, group chats and private DMs are all considered "channels".
 </tr>
 </tbody>
 </table>
-<h3><code>beatmapset_disqualify</code></h3>
+<div id="notification-beatmapset_disqualify" data-unique="notification-beatmapset_disqualify"></div>
+<h4><code>beatmapset_disqualify</code></h4>
 <table>
 <thead>
 <tr>
@@ -2113,7 +2221,8 @@ Public channels, group chats and private DMs are all considered "channels".
 </tr>
 </tbody>
 </table>
-<h3><code>beatmapset_love</code></h3>
+<div id="notification-beatmapset_love" data-unique="notification-beatmapset_love"></div>
+<h4><code>beatmapset_love</code></h4>
 <table>
 <thead>
 <tr>
@@ -2167,6 +2276,7 @@ Public channels, group chats and private DMs are all considered "channels".
 </tr>
 </tbody>
 </table>
+<div id="notification-beatmapset_nominate" data-unique="notification-beatmapset_nominate"></div>
 <h4><code>beatmapset_nominate</code></h4>
 <table>
 <thead>
@@ -2221,6 +2331,7 @@ Public channels, group chats and private DMs are all considered "channels".
 </tr>
 </tbody>
 </table>
+<div id="notification-beatmapset_qualify" data-unique="notification-beatmapset_qualify"></div>
 <h4><code>beatmapset_qualify</code></h4>
 <table>
 <thead>
@@ -2275,6 +2386,7 @@ Public channels, group chats and private DMs are all considered "channels".
 </tr>
 </tbody>
 </table>
+<div id="notification-beatmapset_reset_nominations" data-unique="notification-beatmapset_reset_nominations"></div>
 <h4><code>beatmapset_reset_nominations</code></h4>
 <table>
 <thead>
@@ -2329,6 +2441,7 @@ Public channels, group chats and private DMs are all considered "channels".
 </tr>
 </tbody>
 </table>
+<div id="notification-channel_message" data-unique="notification-channel_message"></div>
 <h4><code>channel_message</code></h4>
 <table>
 <thead>
@@ -2383,6 +2496,7 @@ Public channels, group chats and private DMs are all considered "channels".
 </tr>
 </tbody>
 </table>
+<div id="notification-forum_topic_reply" data-unique="notification-forum_topic_reply"></div>
 <h4><code>forum_topic_reply</code></h4>
 <table>
 <thead>
